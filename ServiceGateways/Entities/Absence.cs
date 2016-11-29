@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace ServiceGateways.Entities
 {
-    public class Absence
+    public class Absence : AbstractEntity
     {
-        public int Id { get; set; }
         public DateTime Date { get; set; }
         public enum Status
         {
