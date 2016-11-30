@@ -1,0 +1,58 @@
+﻿@using DateTimeExtensions
+@using ServiceGateways.Entities
+@model Fravaer_WebApp_Client.Models.EmployeeDetailsViewModel
+
+
+<head>
+    <link href="~/Styles/UserDetailsStyleSheet.css" rel="stylesheet">
+</head>
+<div class="col-md-2"></div>
+<div class="WeekDays col-md-1">
+    <p>Mandag</p>
+</div>
+<div class="WeekDays col-md-1">
+    <p>Tirsdag</p>
+</div>
+<div class="WeekDays col-md-1">
+    <p>Onsdag</p>
+</div>
+<div class="WeekDays col-md-1">
+    <p>Torsdag</p>
+</div>
+<div class="WeekDays col-md-1">
+    <p>Fredag</p>
+</div>
+<div class="WeekDays col-md-1">
+    <p>Lørdag</p>
+</div>
+<div class="WeekDays col-md-1">
+    <p>Søndag</p>
+</div>
+<div class="col-md-3"></div>
+
+@for (int i = 1; i < Model.DateTime.LastDayOfTheMonth().Day; i++)
+{
+    <div class="col-md-2"></div>
+    <div class="CalenderDay col-md-1">
+        <h1>i</h1>
+        @if (GetAbsenceForDate(i) != null)
+        {
+            <h2>@GetAbsenceForDate(i).Status</h2>
+        }
+
+    </div>
+    <div class="col-md-3"></div>
+}
+
+
+
+
+
+@functions
+    {
+    public Absence GetAbsenceForDate(int day)
+    {
+        DateTime eventDate = new DateTime(Model.DateTime.Year, Model.DateTime.Month, day);
+        return Model.User.Absences.FirstOrDefault(x => x.Date == eventDate);
+    }
+}
