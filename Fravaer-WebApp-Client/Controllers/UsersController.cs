@@ -8,33 +8,35 @@ using System.Web;
 using System.Web.Mvc;
 using Fravaer_WebApp_Client.Models;
 using ServiceGateways.Entities;
+using ServiceGateways.Interfaces;
+using ServiceGateways.ServiceGateways;
 
 namespace Fravaer_WebApp_Client.Controllers
 {
 
     public class EmployeesController : Controller
     {
-        private ApplicationDbContext db = new ApplicationDbContext();
+        private IServiceGateway<User, int> _serviceGateway = new UserServiceGateway();
 
-        // GET: Employee
+        // GET: User
         public ActionResult Index()
         {
-            return View(db.Employees.ToList());
+            return View(_serviceGateway.ReadAll());
         }
 
-        // GET: Employee/Details/5
+        // GET: User/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = db.Employees.Find(id);
-            if (employee == null)
+            User user = _serviceGateway.Read(id.Value);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(employee);
+            return View(user);
         }
 
         // GET: Employee/Create
@@ -48,82 +50,71 @@ namespace Fravaer_WebApp_Client.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,FirstName,LastName,UserName,Password,Email")] Employee employee)
+        public ActionResult Create([Bind(Include = "Id,FirstName,LastName,UserName,Password,Email")] User user)
         {
             if (ModelState.IsValid)
             {
-                db.Employees.Add(employee);
-                db.SaveChanges();
+                _serviceGateway.Create(user);
                 return RedirectToAction("Index");
             }
 
-            return View(employee);
+            return View(user);
         }
 
-        // GET: Employee/Edit/5
+        // GET: User/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = db.Employees.Find(id);
-            if (employee == null)
+            User user = _serviceGateway.Read(id.Value);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(employee);
+            return View(user);
         }
 
-        // POST: Employee/Edit/5
+        // POST: User/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,UserName,Password,Email")] Employee employee)
+        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,UserName,Password,Email")] User user)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(employee).State = EntityState.Modified;
-                db.SaveChanges();
+                _serviceGateway.Update(user);
                 return RedirectToAction("Index");
             }
-            return View(employee);
+            return View(user);
         }
 
-        // GET: Employee/Delete/5
+        // GET: User/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Employee employee = db.Employees.Find(id);
-            if (employee == null)
+            User user = _serviceGateway.Read(id.Value);
+            if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(employee);
+            return View(user);
         }
 
-        // POST: Employee/Delete/5
+        // POST: User/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Employee employee = db.Employees.Find(id);
-            db.Employees.Remove(employee);
-            db.SaveChanges();
+            _serviceGateway.Delete(id);
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+
     }
 }
