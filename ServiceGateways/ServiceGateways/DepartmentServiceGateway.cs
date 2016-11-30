@@ -5,7 +5,7 @@ using ServiceGateways.Interfaces;
 
 namespace ServiceGateways.ServiceGateways
 {
-    public class DepartmentServiceGateway : AbstractServiceGateway, IServiceGateway<Department, int>
+    class DepartmentServiceGateway : AbstractServiceGateway, IServiceGateway<Department, int>
     {
         public DepartmentServiceGateway() : base()
         {

@@ -29,5 +29,6 @@ namespace Fravaer_WebApp_Client.Models
         {
             return new ApplicationDbContext();
         }
+
     }
 }

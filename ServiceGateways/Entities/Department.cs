@@ -8,8 +8,9 @@ namespace ServiceGateways.Entities
 {
     public class Department : AbstractEntity
     {
-        public List<Employee> Employees { get; set; }
-        public DeptChief DepartmentChief { get; set; }
+        public string Name { get; set; }
+        public List<User> Employees { get; set; }
+        public User DepartmentChief { get; set; }
 
     }
 }

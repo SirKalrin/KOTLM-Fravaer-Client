@@ -6,7 +6,7 @@ using System.Web.Configuration;
 
 namespace ServiceGateways.ServiceGateways
 {
-    public abstract class AbstractServiceGateway
+    abstract class AbstractServiceGateway
     {
         protected HttpClient Client = new HttpClient();
 
