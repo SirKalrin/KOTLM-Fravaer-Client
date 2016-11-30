@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace ServiceGateways.Entities
 {
+    public enum Role
+    {
+        Employee, DepartmentChief, Admin
+    }
     public class User : AbstractEntity
     {
         public string FirstName { get; set; }
@@ -15,11 +19,8 @@ namespace ServiceGateways.Entities
         public string Email { get; set; }
         public List<Absence> Absences { get; set; }
         public Department Department { get; set; }
+        public Role Role { get; set; }
 
-        public enum Role
-        {
-            Employee, DepartmentChief, Admin
-        }
 
     }
 }

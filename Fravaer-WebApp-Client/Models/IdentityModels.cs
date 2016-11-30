@@ -30,6 +30,5 @@ namespace Fravaer_WebApp_Client.Models
             return new ApplicationDbContext();
         }
 
-        public System.Data.Entity.DbSet<ServiceGateways.Entities.Employee> Employees { get; set; }
     }
 }

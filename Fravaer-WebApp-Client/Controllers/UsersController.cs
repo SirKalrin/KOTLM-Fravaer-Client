@@ -8,20 +8,24 @@ using System.Web;
 using System.Web.Mvc;
 using Fravaer_WebApp_Client.Models;
 using ServiceGateways.Entities;
+using ServiceGateways.Facade;
 using ServiceGateways.Interfaces;
 using ServiceGateways.ServiceGateways;
 
 namespace Fravaer_WebApp_Client.Controllers
 {
-
-    public class EmployeesController : Controller
+    //[Authorize(Roles = "Admin")]
+    public class UsersController : Controller
     {
-        private IServiceGateway<User, int> _serviceGateway = new UserServiceGateway();
+        private IServiceGateway<User, int> _userServiceGateway = new ServiceGatewayFacade().GetUserServiceGateway();
+
+        private IServiceGateway<Department, int> _departmentServiceGateway =
+            new ServiceGatewayFacade().GetDepartmentServiceGateway();
 
         // GET: User
         public ActionResult Index()
         {
-            return View(_serviceGateway.ReadAll());
+            return View(_userServiceGateway.ReadAll());
         }
 
         // GET: User/Details/5
@@ -31,7 +35,7 @@ namespace Fravaer_WebApp_Client.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = _serviceGateway.Read(id.Value);
+            User user = _userServiceGateway.Read(id.Value);
             if (user == null)
             {
                 return HttpNotFound();
@@ -42,7 +46,11 @@ namespace Fravaer_WebApp_Client.Controllers
         // GET: Employee/Create
         public ActionResult Create()
         {
-            return View();
+            return View(new CreateUserViewModel()
+            {
+                User = new User(),
+                Departments = _departmentServiceGateway.ReadAll()
+            });
         }
 
         // POST: Employee/Create
@@ -54,7 +62,7 @@ namespace Fravaer_WebApp_Client.Controllers
         {
             if (ModelState.IsValid)
             {
-                _serviceGateway.Create(user);
+                _userServiceGateway.Create(user);
                 return RedirectToAction("Index");
             }
 
@@ -68,7 +76,7 @@ namespace Fravaer_WebApp_Client.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = _serviceGateway.Read(id.Value);
+            User user = _userServiceGateway.Read(id.Value);
             if (user == null)
             {
                 return HttpNotFound();
@@ -85,7 +93,7 @@ namespace Fravaer_WebApp_Client.Controllers
         {
             if (ModelState.IsValid)
             {
-                _serviceGateway.Update(user);
+                _userServiceGateway.Update(user);
                 return RedirectToAction("Index");
             }
             return View(user);
@@ -98,7 +106,7 @@ namespace Fravaer_WebApp_Client.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = _serviceGateway.Read(id.Value);
+            User user = _userServiceGateway.Read(id.Value);
             if (user == null)
             {
                 return HttpNotFound();
@@ -111,7 +119,7 @@ namespace Fravaer_WebApp_Client.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            _serviceGateway.Delete(id);
+            _userServiceGateway.Delete(id);
             return RedirectToAction("Index");
         }
 

@@ -8,7 +8,7 @@ using Newtonsoft.Json.Linq;
 
 namespace ServiceGateways.ServiceGateways
 {
-    public class AuthorizationServiceGateway
+    class AuthorizationServiceGateway
     {
         private HttpClient _client = new HttpClient();
 

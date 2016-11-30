@@ -5,7 +5,7 @@ using ServiceGateways.Interfaces;
 
 namespace ServiceGateways.ServiceGateways
 {
-    public class AbsenceServiceGateway : AbstractServiceGateway, IServiceGateway<Absence, int>
+    class AbsenceServiceGateway : AbstractServiceGateway, IServiceGateway<Absence, int>
     {
         public AbsenceServiceGateway() : base()
         {

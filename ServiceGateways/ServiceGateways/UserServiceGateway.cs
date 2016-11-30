@@ -9,7 +9,7 @@ using ServiceGateways.Interfaces;
 
 namespace ServiceGateways.ServiceGateways
 {
-    public class UserServiceGateway : AbstractServiceGateway, IServiceGateway<User, int>
+    class UserServiceGateway : AbstractServiceGateway, IServiceGateway<User, int>
     {
         public UserServiceGateway() : base()
         {
