@@ -7,30 +7,22 @@ namespace ServiceGateways.Facade
     public class ServiceGatewayFacade
     {
         private IServiceGateway<Absence, int> _absenceGateway;
-        private IServiceGateway<Admin, int> _adminGateway;
         private IServiceGateway<Department, int> _departmentGateway;
-        private IServiceGateway<DeptChief, int> _deptChiefGateway;
-        private IServiceGateway<Employee, int> _employeeGateway;
+        private IServiceGateway<User, int> _userGateway;
 
         public IServiceGateway<Absence, int> GetAbsenceServiceGateway()
         {
             return _absenceGateway ?? (_absenceGateway = new AbsenceServiceGateway());
         }
-        public IServiceGateway<Admin, int> GetAdminServiceGateway()
-        {
-            return _adminGateway ?? (_adminGateway = new AdminServiceGateway());
-        }
+     
         public IServiceGateway<Department, int> GetDepartmentServiceGateway()
         {
             return _departmentGateway ?? (_departmentGateway = new DepartmentServiceGateway());
         }
-        public IServiceGateway<DeptChief, int> GetDeptChiefServiceGateway()
+        
+        public IServiceGateway<User, int> GetUserServiceGateway()
         {
-            return _deptChiefGateway ?? (_deptChiefGateway = new DeptChiefServiceGateway());
-        }
-        public IServiceGateway<Employee, int> GetEmployeeServiceGateway()
-        {
-            return _employeeGateway ?? (_employeeGateway = new EmployeeServiceGateway());
+            return _userGateway ?? (_userGateway = new UserServiceGateway());
         }
     }
 }
