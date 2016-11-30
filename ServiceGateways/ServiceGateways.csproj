@@ -49,7 +49,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Entities\Absence.cs" />
     <Compile Include="Entities\AbstractEntity.cs" />
     <Compile Include="Entities\Admin.cs" />
