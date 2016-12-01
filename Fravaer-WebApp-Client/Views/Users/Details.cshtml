@@ -1,8 +1,16 @@
-﻿@model ServiceGateways.Entities.Employee
+﻿@using System.Activities.Statements
+@using DateTimeExtensions
+@using Fravaer_WebApp_Client.Models
+@using ServiceGateways.Entities
+@model Fravaer_WebApp_Client.Models.UserDetailsViewModel
 
 @{
     ViewBag.Title = "Details";
 }
+
+<head>
+    <link href="~/Styles/UserDetailsStyleSheet.css" rel="stylesheet" type="text/css" />
+</head>
 
 <h2>Details</h2>
 
@@ -11,48 +19,117 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
+            @Html.DisplayNameFor(model => model.User.FirstName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.FirstName)
+            @Html.DisplayFor(model => model.User.FirstName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.LastName)
+            @Html.DisplayNameFor(model => model.User.LastName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.LastName)
+            @Html.DisplayFor(model => model.User.LastName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.UserName)
+            @Html.DisplayNameFor(model => model.User.UserName)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.UserName)
+            @Html.DisplayFor(model => model.User.UserName)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Password)
+            @Html.DisplayNameFor(model => model.User.Password)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Password)
+            @Html.DisplayFor(model => model.User.Password)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Email)
+            @Html.DisplayNameFor(model => model.User.Email)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Email)
+            @Html.DisplayFor(model => model.User.Email)
         </dd>
 
     </dl>
 </div>
+
+<div class="Container">
+
+
+    <div class="WeekDay col-md-2"></div>
+    <div class="WeekDay col-md-1"><p>Mandag</p></div>
+    <div class="WeekDay col-md-1"><p>Tirsdag</p></div>
+    <div class="WeekDay col-md-1"><p>Onsdag</p></div>
+    <div class="WeekDay col-md-1"><p>Torsdag</p></div>
+    <div class="WeekDay col-md-1"><p>Fredag</p></div>
+    <div class="WeekDay col-md-1"><p>Lørdag</p></div>
+    <div class="WeekDay col-md-1"><p>Søndag</p></div>
+    <div class="WeekDay col-md-3"></div>
+
+    @for (int i = 0; i < 5; i++)
+    {
+        <div class="col-md-2 EmptyDiv"></div>
+        if (i == 0)
+        {
+            for (int j = 0; j < @Model.InitIndex; j++)
+            {
+                <div class="col-md-1 GrayDiv"></div>
+            }
+            for (int s = (i * 7) + 1; s <= (i + 1) * 7 - Model.InitIndex; s++)
+            {
+                <div class="CalendarDay col-md-1">
+                    <h2>@s</h2>
+                        @if (GetAbsenceForDate(s) != null)
+                        {
+                            <p>@GetAbsenceForDate(s).Status.ToString()</p>
+                        }
+                </div>
+            }
+            <div class="col-md-3 EmptyDiv"></div>
+        }
+        else
+        {
+            for (int s = (i * 7) + 1 - Model.InitIndex; s <= (i + 1) * 7 - Model.InitIndex; s++)
+            {
+                <div class="CalendarDay col-md-1">
+                    <h2>@s</h2>
+                    @if (s < Model.DateTime.LastDayOfTheMonth().Day)
+                    {
+                        if (GetAbsenceForDate(s) != null)
+                        {
+                            <p>@GetAbsenceForDate(s).Status.ToString()</p>
+                        }
+                    }
+                    else
+                    {
+                        return;
+                    }
+                </div>
+            }
+            <div class="col-md-3 EmptyDiv"></div>
+        }
+    }
+</div>
+
+
+@functions
+{
+    public Absence GetAbsenceForDate(int day)
+    {
+        DateTime eventDate = new DateTime(@Model.DateTime.Year, @Model.DateTime.Month, day);
+        return Model.User.Absences.FirstOrDefault(x => x.Date == eventDate);
+    }
+}
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.User.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

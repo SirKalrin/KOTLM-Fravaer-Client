@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Web;
 using System.Web.Mvc;
 using Fravaer_WebApp_Client.Models;
@@ -35,12 +37,31 @@ namespace Fravaer_WebApp_Client.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = _userServiceGateway.Read(id.Value);
+            //User user = _userServiceGateway.Read(id.Value);
+            var user = new User() { FirstName = "Nico", LastName = "Jørg", Email = "nico@gmail.com", UserName = "nico@gmail.com", Password = "1234gtx", Id = 1, Absences = new List<Absence>() { new Absence() { Id = 1, Date = new DateTime(2017, 2, 2) {}, Status = Statuses.F } } };
+
             if (user == null)
             {
                 return HttpNotFound();
             }
-            return View(user);
+
+            // BLL LAYER!
+            var list = new ArrayList();
+            list.Add("Monday");
+            list.Add("Tuesday");
+            list.Add("Wednesday");
+            list.Add("Thursday");
+            list.Add("Friday");
+            list.Add("Saturday");
+            list.Add("Sunday");
+            int index = list.IndexOf(new DateTime(2017, 2, 1).DayOfWeek.ToString());
+
+
+            var viewModel = new UserDetailsViewModel() {
+                User = user,
+                DateTime = new DateTime(2017, 2, 1),
+                InitIndex = index};
+            return View(viewModel);
         }
 
         // GET: Employee/Create
