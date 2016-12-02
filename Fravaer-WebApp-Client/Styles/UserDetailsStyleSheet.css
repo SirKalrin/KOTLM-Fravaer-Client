@@ -1,12 +1,12 @@
 ﻿.CalendarDay {
     border: 1px solid #000000;
     height: 18%;
-    background-color: whitesmoke;
+    background-color: lightblue;
 
 }
 
 .CalendarDay:hover {
-    background-color: lightblue;
+    background-color: turquoise;
 }
 
 .CalendarDay h2 {
@@ -73,7 +73,20 @@
 .Container {
     height: 450px;
     width: 500px;
+    /*Garbage code start:*/
+    margin-left: 600px;
+    margin-top: -400px;
 }
+
+
+.AbsenceCodeDiv {
+    margin-left: 550px;
+}
+
+.UserDetailsDiv {
+    margin-left: 300px;
+}
+/*Garbage code ends:*/
 
 .GrayDiv {
     background-color: gray;
@@ -103,6 +116,10 @@
 
 dt {
     font-size: 100%;
+}
+
+.MonthsDiv {
+    height: 10%;
 }
 
 

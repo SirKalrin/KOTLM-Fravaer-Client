@@ -12,10 +12,10 @@
     <link href="~/Styles/UserDetailsStyleSheet.css" rel="stylesheet" type="text/css" />
 </head>
 
-<h2>Detaljer</h2>
+<h2 align="center" style="margin-left: -53px">Detaljer</h2>
 <div>
 
-    <div class="col-lg-2">
+    <div class="UserDetailsDiv col-lg-2">
         <h3>Information</h3>
         <hr />
         <dl>
@@ -59,7 +59,7 @@
         </p>
     </div>
 
-    <div class="col-lg-3">
+    <div class="AbsenceCodeDiv col-lg-3">
         <div>
             <h3>Overstyrring</h3>
             <input class="Checkbox" type="checkbox" />Tillad Overstyrring
@@ -86,20 +86,14 @@
     <div class="Container col-lg-7" style="text-align: center">
 
         <div class="MonthsDiv col-md-12">
-            <div class="col-md-6">
-                <form action="Details.cshtml" method="get">
-                    <input type="hidden" value="@Model.DateTime.AddMonths(-1)" name="MonthDate"/>
-                    <input type="hidden" value="@Model.User" name="person"/>
-                    <button type="submit" value="submit">Forrige</button>
-                </form>
+            <div class="col-md-4">
+                <a class="btn btn-success" href='@Url.Action("Details", "Users", new RouteValueDictionary(new {id = Model.User.Id, monthDate = Model.DateTime.AddMonths(-1)}))'>Forrige</a>
             </div>
-            <div class="col-md-6">
-                <a class="btn btn-success" href='@Url.Action("Details", "Users", new RouteValueDictionary( new { Person = Model.User, MonthDate = Model.DateTime.AddMonths(1)}))'>Checkout</a>
-                @*<form action="Details.cshtml" method="get">
-                    <input type="hidden" value="@Model.DateTime.AddMonths(1)" name="MonthDate"/>
-                    <input type="hidden" value="@Model.User" name="person"/>
-                    <button type="submit" value="submit">Næste </button>
-                </form>*@
+            <div class="col-md-4">
+                <p>@Model.DateTime.ToString("yyyy MMMM")</p>
+            </div>
+            <div class="col-md-4">
+                <a class="btn btn-success" href='@Url.Action("Details", "Users", new RouteValueDictionary( new { id = Model.User.Id, monthDate = Model.DateTime.AddMonths(1)}))'>Næste</a>
             </div>
         </div>
 
@@ -131,13 +125,21 @@
             {
                 for (int j = 0; j < @Model.InitIndex; j++)
                 {
-                    <div class="col-md-2 GrayDiv"></div>
+
+                    if (j == (7 * (i + 1)) - 1 || j == 7 * (i + 1) - 2)
+                    {
+                        <div class="WeekEnd col-md-1"></div>
+                    }
+                    else
+                    {
+                        <div class="col-md-2 GrayDiv"></div>
+                    }
                 }
             }
 
-            for (int s = GetStartIndex(i); s <= (i + 1)*7 - Model.InitIndex; s++)
+            for (int s = GetStartIndex(i); s <= (i + 1) * 7 - Model.InitIndex; s++)
             {
-                if (s + Model.InitIndex == (7*(i + 1)) - 1 || s + Model.InitIndex == 7*(i + 1))
+                if (s + Model.InitIndex == (7 * (i + 1)) - 1 || s + Model.InitIndex == 7 * (i + 1))
                 {
                     <div class="WeekEnd col-md-1">
                         <h2>@s</h2>
@@ -161,11 +163,11 @@
                 }
                 if (s == Model.DateTime.LastDayOfTheMonth().Day)
                 {
-                    for (int m = s + Model.InitIndex; m < (i + 1)*7; m++)
+                    for (int m = s + Model.InitIndex; m < (i + 1) * 7; m++)
                     {
-                        if (m == (7*(i + 1)) - 1 || m == 7*(i + 1) - 2)
+                        if (m == (7 * (i + 1)) - 1 || m == 7 * (i + 1) - 2)
                         {
-                            <div class="col-md-1 GrayDiv"></div>
+                            <div class="WeekEnd col-md-1"></div>
                         }
                         else
                         {

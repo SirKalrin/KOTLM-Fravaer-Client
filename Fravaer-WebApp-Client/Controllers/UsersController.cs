@@ -27,24 +27,40 @@ namespace Fravaer_WebApp_Client.Controllers
         // GET: User
         public ActionResult Index()
         {
-            return View(_userServiceGateway.ReadAll());
+            //var user = new User() { FirstName = "Nico", LastName = "Jørg", Email = "nico@gmail.com", UserName = "nico@gmail.com", Password = "1234gtx", Id = 1, Absences = new List<Absence>() { new Absence() { Id = 1, Date = new DateTime(2017, 2, 2) { }, Status = Statuses.F } } };
+            //var user1 = new User() { FirstName = "Nico", LastName = "Jørg", Email = "nico@gmail.com", UserName = "nico@gmail.com", Password = "1234gtx", Id = 1, Absences = new List<Absence>() { new Absence() { Id = 1, Date = new DateTime(2017, 2, 2) { }, Status = Statuses.F } } };
+            //var user2 = new User() { FirstName = "Nico", LastName = "Jørg", Email = "nico@gmail.com", UserName = "nico@gmail.com", Password = "1234gtx", Id = 1, Absences = new List<Absence>() { new Absence() { Id = 1, Date = new DateTime(2017, 2, 2) { }, Status = Statuses.F } } };
+            //var user3 = new User() { FirstName = "Nico", LastName = "Jørg", Email = "nico@gmail.com", UserName = "nico@gmail.com", Password = "1234gtx", Id = 1, Absences = new List<Absence>() { new Absence() { Id = 1, Date = new DateTime(2017, 2, 2) { }, Status = Statuses.F } } };
+            //List<User> users = new List<User>();
+
+            //users.Add(user);
+            //users.Add(user1);
+            //users.Add(user2);
+            //users.Add(user3);
+
+            //var department = new Department() { Users = users, Id = 1, Name = "Fælles"};
+            //var department2 = new Department() { Users = users, Id = 1, Name = "Erhverv" };
+            //var department3 = new Department() { Users = users, Id = 1, Name = "Ribe" };
+            //var department4 = new Department() { Users = users, Id = 1, Name = "Esbjerg" };
+            //List<Department> departments = new List<Department>();
+            //departments.Add(department);
+            //departments.Add(department2);
+            //departments.Add(department3);
+            //departments.Add(department4);
+
+            return View(_departmentServiceGateway.ReadAll());
         }
 
         // GET: User/Details/5
-        public ActionResult Details(int? id, DateTime? MonthDate)
+        public ActionResult Details(int? id, DateTime? monthDate)
         {
-            //if (id == null)
-            //{
-            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            //}
-            //User user = _userServiceGateway.Read(id.Value);
-            var user = new User() { FirstName = "Nico", LastName = "Jørg", Email = "nico@gmail.com", UserName = "nico@gmail.com", Password = "1234gtx", Id = 1,
-                Absences = new List<Absence>() {
-                    new Absence() { Id = 1, Date = new DateTime(2017, 2, 3) {}, Status = Statuses.FF },
-                    new Absence() { Id = 2, Date = new DateTime(2017, 2, 4) { }, Status = Statuses.FF },
-                    new Absence() { Id = 3, Date = new DateTime(2017, 2, 13) { }, Status = Statuses.FF },
-                    new Absence() { Id = 4, Date = new DateTime(2017, 2, 17) { }, Status = Statuses.HF } } };
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
+            User user = _userServiceGateway.Read(id.Value);
+            
             if (user == null)
             {
                 return HttpNotFound();
@@ -59,24 +75,22 @@ namespace Fravaer_WebApp_Client.Controllers
             list.Add("Friday");
             list.Add("Saturday");
             list.Add("Sunday");
-            int index = list.IndexOf(new DateTime(2017, 2, 1).DayOfWeek.ToString());
+            //int index = list.IndexOf(new DateTime(2017, 2, 1).DayOfWeek.ToString());
 
+            DateTime monthShow = DateTime.Now;
+
+            if (monthDate != null)
+            {
+                monthShow = monthDate.Value;
+            }
+
+            int index = list.IndexOf(monthShow.DayOfWeek.ToString());
 
             var viewModel = new UserDetailsViewModel() {
                 User = user,
-                DateTime = new DateTime(2017, 2, 1),
+                DateTime = monthShow,
                 InitIndex = index};
 
-            if (id != 1)
-            {
-                int ind = list.IndexOf(MonthDate);
-                viewModel = new UserDetailsViewModel()
-                {
-                    
-                    DateTime = MonthDate.Value,
-                    InitIndex = ind
-                };
-            }
             return View(viewModel);
         }
 
@@ -103,7 +117,10 @@ namespace Fravaer_WebApp_Client.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(user);
+            return View(new CreateUserViewModel()
+            {
+                User = user, Departments = _departmentServiceGateway.ReadAll()
+            });
         }
 
         // GET: User/Edit/5

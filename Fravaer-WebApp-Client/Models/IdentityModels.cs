@@ -30,5 +30,8 @@ namespace Fravaer_WebApp_Client.Models
             return new ApplicationDbContext();
         }
 
+        public System.Data.Entity.DbSet<ServiceGateways.Entities.Department> Departments { get; set; }
+
+        public System.Data.Entity.DbSet<ServiceGateways.Entities.Absence> Absences { get; set; }
     }
 }
