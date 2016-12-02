@@ -21,6 +21,10 @@ namespace ServiceGateways.Entities
         public Department Department { get; set; }
         public Role Role { get; set; }
 
-
+        public User()
+        {
+            Absences = new List<Absence>();
+            Department = new Department();
+        }
     }
 }

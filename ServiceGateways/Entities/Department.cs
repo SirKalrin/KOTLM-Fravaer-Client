@@ -11,5 +11,9 @@ namespace ServiceGateways.Entities
         public string Name { get; set; }
         public List<User> Users { get; set; }
 
+        public Department()
+        {
+            Users = new List<User>();
+        }
     }
 }

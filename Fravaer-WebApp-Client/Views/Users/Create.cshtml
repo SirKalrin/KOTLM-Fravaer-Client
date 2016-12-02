@@ -1,4 +1,5 @@
-﻿@using ServiceGateways.Entities
+﻿@using System.Web.DynamicData
+@using ServiceGateways.Entities
 @model Fravaer_WebApp_Client.Models.CreateUserViewModel
 
 @{
@@ -55,8 +56,13 @@
                 @Html.ValidationMessageFor(model => model.User.Email, "", new { @class = "text-danger" })
             </div>
         </div>
-        <div class="form-group col-md-8">
-            <label class="col-xs-3 control-label">Rolle</label>
+        <div class="form-group">
+            @Html.LabelFor(model => model.User.Role, "Rolle",htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EnumDropDownListFor(model => model.User.Role, new {htmlAttributes = new {@class = "form-control"}})
+                @Html.ValidationMessageFor(model => model.User.Role, "", new {htmlAttributes = new {@class = "text-danger"}})
+            </div>
+            @*<label class="col-xs-3 control-label">Rolle</label>
             <div class="col-xs-5 selectContainer">
                 <select class="form-control" name="roller">
                     <option value="">Vælg Rolle</option>
@@ -65,9 +71,16 @@
                     <option value="@Role.Admin">Administrator</option>
                 </select>
             </div>
-            @Html.ValidationMessageFor(model => model.User.Role, "", new { @class = "text-danger" })
+            @Html.ValidationMessageFor(model => model.User.Role, "", new {@class = "text-danger"})*@
         </div>
-        <div class="form-group col-md-8">
+        <div class="form-group">
+            @Html.LabelFor(model => model.User.Department.Id, "Afdeling", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.User.Department.Id, new SelectList(Model.Departments, "Id", "Name"), new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.User.Department.Id, "", new { htmlAttributes = new { @class = "text-danger" } })
+            </div>
+        </div>
+        @*<div class="form-group col-md-8">
             <label class="col-xs-3 control-label">Afdeling</label>
             <div class="col-xs-5 selectContainer">
                 <select class="form-control" name="afdelinger">
@@ -79,7 +92,7 @@
                 </select>
             </div>
             @Html.ValidationMessageFor(model => model.User.Department, "", new { @class = "text-danger" })
-        </div>
+        </div>*@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Opret Medarbejder" class="btn btn-default" />
