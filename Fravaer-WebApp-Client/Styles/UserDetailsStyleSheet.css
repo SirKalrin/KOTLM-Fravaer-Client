@@ -1,0 +1,46 @@
+﻿
+.CalendarDay {
+    border: 2px solid #000000;
+    height: 18%;
+    background-color: whitesmoke
+
+}
+.CalendarDay:hover {
+    background-color: lightblue
+}
+
+.WeekDay {
+    border: 2px solid #000000;
+    height: 5%;
+    font-family: monospace;
+    font-size: 20px;
+    background-color: #5f021f
+}
+
+.h3 {
+    text-align: left;
+}
+
+
+.Container {
+    height: 700px;
+    width: 1200px;
+    border: 2px solid aqua;
+}
+
+.GrayDiv {
+    background-color: gray;
+    border: 2px solid #000000;
+    height: 18%;
+
+}
+
+p {
+    color: white;
+}
+
+.EmptyDiv {
+   height: 18%;
+   border: 1px solid #000000
+}
+

@@ -1,57 +1,85 @@
-﻿@model IEnumerable<ServiceGateways.Entities.Employee>
+﻿@using System.Web.UI.WebControls
+@model IEnumerable<ServiceGateways.Entities.Department>
 
 @{
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<head>
+    <link href="~/Styles/IndexSyleSheet.css" rel="stylesheet" type="text/css" />
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.UserName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Password)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th></th>
-    </tr>
+</head>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.LastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.UserName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Password)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
+
+<body>
+    <header class="header">
+        <div class="col-md-12" id="logo">
+            <a href="/"><img src="http://eeu.dk/templates/webitallskeleton/images/dev/logo-dk.png"></a>
+
+        </div>
+
+    </header>
+<div class="CheckboxRow col-md-2">
+    <table class="UserTable"calls="table">
+        <h3>Medarbejdere:</h3>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <input class="Checkbox" type="checkbox" checked="checked"/>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                
+            </tr>
+        }
+    </table>
+
+</div>
+<div class="Calendar col-md-8">
+    @for (int i = 0; i < 30; i++)
+    {
+        <div style="width: 10px; float: right; height: 10px; margin: 9px;">
+            @for (int j = 0; j < 8; j++)
+            {
+                <div class="square"></div>
+            }
+        </div>
+    }
+
+</div>
+<div class="Override col-md-2">
+    <table class="OverrideTable">
+        <h3>Overstyrring</h3>
+        <tr>
+            <input class="Checkbox" type="checkbox"/>Tillad Overstyrring
+        </tr>
+    </table>
+
+    <h3>Fraværskoder:</h3>
+    <input type="radio" name="absenceType"> S - Syg<br/>
+    <input type="radio" name="absenceType"> HS - ½ygedag<br/>
+    <input type="radio" name="absenceType"> F - Ferie<br/>
+    <input type="radio" name="absenceType"> HF - ½feriedag<br/>
+    <input type="radio" name="absenceType"> FF - Feriefridag<br/>
+    <input type="radio" name="absenceType"> HFF - ½Feriefridag<br/>
+    <input type="radio" name="absenceType"> K - Kursus<br/>
+    <input type="radio" name="absenceType"> B - Barsel<br/>
+    <input type="radio" name="absenceType"> BS - Barn 1. sygedag<br/>
+    <input type="radio" name="absenceType"> AF - Andet fravær<br/>
+    <input type="radio" name="absenceType"> A - Afspadsering<br/>
+    <input type="radio" name="absenceType"> HA - ½afspadsering<br/>
+    <input type="radio" name="absenceType"> SN - Seniordag<br/>
+
+</div>
+</body>
+
+@functions
+{
+
+    public void CreateTableRow()
+    {
+           
+    }
 }
-
-</table>
