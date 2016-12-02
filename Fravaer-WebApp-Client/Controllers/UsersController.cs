@@ -99,7 +99,7 @@ namespace Fravaer_WebApp_Client.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,FirstName,LastName,UserName,Password,Email")] User user)
+        public ActionResult Create([Bind(Include = "Id,FirstName,LastName,UserName,Password,Email,Department,Role")] User user)
         {
             if (ModelState.IsValid)
             {
