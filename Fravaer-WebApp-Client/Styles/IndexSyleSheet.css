@@ -1,0 +1,26 @@
+﻿body {
+    background: url(http://www.eeu.dk/templates/webitallskeleton/images/bodybg.jpg) center top no-repeat fixed #cacaca;
+    background-size: cover;
+}
+.CheckboxRow {
+    border: 2px solid #000000;
+  
+
+}
+.Override {
+    border: 2px solid #000000;
+}
+
+.header {
+   background: url(http://www.eeu.dk/templates/webitallskeleton/images/dev/headerbg.png) repeat top #1d1f26;
+   border-radius: 8px 8px 0 0;
+}
+.square {
+    width: 26px;
+    height: 26px;
+    border: 1px solid black;
+
+}
+
+
+
