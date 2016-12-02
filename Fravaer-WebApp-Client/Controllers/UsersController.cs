@@ -31,14 +31,19 @@ namespace Fravaer_WebApp_Client.Controllers
         }
 
         // GET: User/Details/5
-        public ActionResult Details(int? id)
+        public ActionResult Details(int? id, DateTime? MonthDate)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+            //if (id == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
             //User user = _userServiceGateway.Read(id.Value);
-            var user = new User() { FirstName = "Nico", LastName = "Jørg", Email = "nico@gmail.com", UserName = "nico@gmail.com", Password = "1234gtx", Id = 1, Absences = new List<Absence>() { new Absence() { Id = 1, Date = new DateTime(2017, 2, 2) {}, Status = Statuses.F } } };
+            var user = new User() { FirstName = "Nico", LastName = "Jørg", Email = "nico@gmail.com", UserName = "nico@gmail.com", Password = "1234gtx", Id = 1,
+                Absences = new List<Absence>() {
+                    new Absence() { Id = 1, Date = new DateTime(2017, 2, 3) {}, Status = Statuses.FF },
+                    new Absence() { Id = 2, Date = new DateTime(2017, 2, 4) { }, Status = Statuses.FF },
+                    new Absence() { Id = 3, Date = new DateTime(2017, 2, 13) { }, Status = Statuses.FF },
+                    new Absence() { Id = 4, Date = new DateTime(2017, 2, 17) { }, Status = Statuses.HF } } };
 
             if (user == null)
             {
@@ -61,6 +66,17 @@ namespace Fravaer_WebApp_Client.Controllers
                 User = user,
                 DateTime = new DateTime(2017, 2, 1),
                 InitIndex = index};
+
+            if (id != 1)
+            {
+                int ind = list.IndexOf(MonthDate);
+                viewModel = new UserDetailsViewModel()
+                {
+                    
+                    DateTime = MonthDate.Value,
+                    InitIndex = ind
+                };
+            }
             return View(viewModel);
         }
 

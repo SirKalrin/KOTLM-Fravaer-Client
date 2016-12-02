@@ -12,124 +12,204 @@
     <link href="~/Styles/UserDetailsStyleSheet.css" rel="stylesheet" type="text/css" />
 </head>
 
-<h2>Details</h2>
-
+<h2>Detaljer</h2>
 <div>
-    <h4>Employee</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.User.FirstName)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.FirstName)
-        </dd>
+    <div class="col-lg-2">
+        <h3>Information</h3>
+        <hr />
+        <dl>
+            <dt>
+                @Html.DisplayNameFor(model => model.User.FirstName)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.LastName)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.User.FirstName)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.LastName)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.User.LastName)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.UserName)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.User.LastName)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.UserName)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.User.UserName)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Password)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.User.UserName)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Password)
-        </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.User.Email)
+            </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Email)
-        </dt>
+            <dd>
+                @Html.DisplayFor(model => model.User.Email)
+            </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.Email)
-        </dd>
+        </dl>
+        <hr />
+        <p>
+            @Html.ActionLink("Edit", "Edit", new { id = Model.User.Id }) |
+            @Html.ActionLink("Back to List", "Index")
+        </p>
+    </div>
 
-    </dl>
-</div>
+    <div class="col-lg-3">
+        <div>
+            <h3>Overstyrring</h3>
+            <input class="Checkbox" type="checkbox" />Tillad Overstyrring
 
-<div class="Container">
+            <h3>Fraværskoder:</h3>
+            <input type="radio" name="absenceType"> S - Syg<br />
+            <input type="radio" name="absenceType"> HS - ½ygedag<br />
+            <input type="radio" name="absenceType"> F - Ferie<br />
+            <input type="radio" name="absenceType"> HF - ½feriedag<br />
+            <input type="radio" name="absenceType"> FF - Feriefridag<br />
+            <input type="radio" name="absenceType"> HFF - ½Feriefridag<br />
+            <input type="radio" name="absenceType"> K - Kursus<br />
+            <input type="radio" name="absenceType"> B - Barsel<br />
+            <input type="radio" name="absenceType"> BS - Barn 1. sygedag<br />
+            <input type="radio" name="absenceType"> AF - Andet fravær<br />
+            <input type="radio" name="absenceType"> A - Afspadsering<br />
+            <input type="radio" name="absenceType"> HA - ½afspadsering<br />
+            <input type="radio" name="absenceType"> SN - Seniordag<br />
+
+        </div>
+    </div>
 
 
-    <div class="WeekDay col-md-2"></div>
-    <div class="WeekDay col-md-1"><p>Mandag</p></div>
-    <div class="WeekDay col-md-1"><p>Tirsdag</p></div>
-    <div class="WeekDay col-md-1"><p>Onsdag</p></div>
-    <div class="WeekDay col-md-1"><p>Torsdag</p></div>
-    <div class="WeekDay col-md-1"><p>Fredag</p></div>
-    <div class="WeekDay col-md-1"><p>Lørdag</p></div>
-    <div class="WeekDay col-md-1"><p>Søndag</p></div>
-    <div class="WeekDay col-md-3"></div>
+    <div class="Container col-lg-7" style="text-align: center">
 
-    @for (int i = 0; i < 5; i++)
+        <div class="MonthsDiv col-md-12">
+            <div class="col-md-6">
+                <form action="Details.cshtml" method="get">
+                    <input type="hidden" value="@Model.DateTime.AddMonths(-1)" name="MonthDate"/>
+                    <input type="hidden" value="@Model.User" name="person"/>
+                    <button type="submit" value="submit">Forrige</button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <a class="btn btn-success" href='@Url.Action("Details", "Users", new RouteValueDictionary( new { Person = Model.User, MonthDate = Model.DateTime.AddMonths(1)}))'>Checkout</a>
+                @*<form action="Details.cshtml" method="get">
+                    <input type="hidden" value="@Model.DateTime.AddMonths(1)" name="MonthDate"/>
+                    <input type="hidden" value="@Model.User" name="person"/>
+                    <button type="submit" value="submit">Næste </button>
+                </form>*@
+            </div>
+        </div>
+
+        <div class="WeekDay col-md-2">
+            <p>Mandag</p>
+        </div>
+        <div class="WeekDay col-md-2">
+            <p>Tirsdag</p>
+        </div>
+        <div class="WeekDay col-md-2">
+            <p>Onsdag</p>
+        </div>
+        <div class="WeekDay col-md-2">
+            <p>Torsdag</p>
+        </div>
+        <div class="WeekDay col-md-2">
+            <p>Fredag</p>
+        </div>
+        <div class="WeekEndDay col-md-1">
+            <p>Lør</p>
+        </div>
+        <div class="WeekEndDay col-md-1">
+            <p>Søn</p>
+        </div>
+
+        @for (int i = 0; i < 6; i++)
+        {
+            if (i == 0)
+            {
+                for (int j = 0; j < @Model.InitIndex; j++)
+                {
+                    <div class="col-md-2 GrayDiv"></div>
+                }
+            }
+
+            for (int s = GetStartIndex(i); s <= (i + 1)*7 - Model.InitIndex; s++)
+            {
+                if (s + Model.InitIndex == (7*(i + 1)) - 1 || s + Model.InitIndex == 7*(i + 1))
+                {
+                    <div class="WeekEnd col-md-1">
+                        <h2>@s</h2>
+                    </div>
+                }
+                else
+                {
+                    <div class="CalendarDay col-md-2">
+                        <h2>@s</h2>
+                        @if (s < Model.DateTime.LastDayOfTheMonth().Day)
+                        {
+                            if (GetAbsenceForDate(s) != null)
+                            {
+                                <div class="AbsenceLbl">
+                                    <p>@GetAbsenceForDate(s).Status.ToString()</p>
+                                </div>
+                            }
+                        }
+
+                    </div>
+                }
+                if (s == Model.DateTime.LastDayOfTheMonth().Day)
+                {
+                    for (int m = s + Model.InitIndex; m < (i + 1)*7; m++)
+                    {
+                        if (m == (7*(i + 1)) - 1 || m == 7*(i + 1) - 2)
+                        {
+                            <div class="col-md-1 GrayDiv"></div>
+                        }
+                        else
+                        {
+                            <div class="col-md-2 GrayDiv"></div>
+                        }
+                    }
+                    return;
+                }
+            }
+        }
+    </div>
+
+    
+
+    
+
+
+
+    @functions
     {
-        <div class="col-md-2 EmptyDiv"></div>
-        if (i == 0)
+
+        public Absence GetAbsenceForDate(int day)
         {
-            for (int j = 0; j < @Model.InitIndex; j++)
-            {
-                <div class="col-md-1 GrayDiv"></div>
-            }
-            for (int s = (i * 7) + 1; s <= (i + 1) * 7 - Model.InitIndex; s++)
-            {
-                <div class="CalendarDay col-md-1">
-                    <h2>@s</h2>
-                        @if (GetAbsenceForDate(s) != null)
-                        {
-                            <p>@GetAbsenceForDate(s).Status.ToString()</p>
-                        }
-                </div>
-            }
-            <div class="col-md-3 EmptyDiv"></div>
+            DateTime eventDate = new DateTime(@Model.DateTime.Year, @Model.DateTime.Month, day);
+            return Model.User.Absences.FirstOrDefault(x => x.Date == eventDate);
         }
-        else
+
+        public int GetStartIndex(int i)
         {
-            for (int s = (i * 7) + 1 - Model.InitIndex; s <= (i + 1) * 7 - Model.InitIndex; s++)
+            int result = (i * 7) - Model.InitIndex;
+
+            if (result < 0)
             {
-                <div class="CalendarDay col-md-1">
-                    <h2>@s</h2>
-                    @if (s < Model.DateTime.LastDayOfTheMonth().Day)
-                    {
-                        if (GetAbsenceForDate(s) != null)
-                        {
-                            <p>@GetAbsenceForDate(s).Status.ToString()</p>
-                        }
-                    }
-                    else
-                    {
-                        return;
-                    }
-                </div>
+                return (i * 7) + 1;
             }
-            <div class="col-md-3 EmptyDiv"></div>
+            else
+            {
+                return (i * 7) + 1 - Model.InitIndex;
+            }
         }
+
     }
 </div>
 
 
-@functions
-{
-    public Absence GetAbsenceForDate(int day)
-    {
-        DateTime eventDate = new DateTime(@Model.DateTime.Year, @Model.DateTime.Month, day);
-        return Model.User.Absences.FirstOrDefault(x => x.Date == eventDate);
-    }
-}
 
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.User.Id }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+

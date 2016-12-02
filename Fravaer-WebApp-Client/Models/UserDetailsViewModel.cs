@@ -15,9 +15,7 @@ namespace Fravaer_WebApp_Client.Models
     {
         public User User { get; set; }
         public DateTime DateTime {get; set;}
-        public string[] WeekDays { get; set; }
         public int InitIndex { get; set; }
-        public ArrayList Days { get; set; }
     }
 
 
