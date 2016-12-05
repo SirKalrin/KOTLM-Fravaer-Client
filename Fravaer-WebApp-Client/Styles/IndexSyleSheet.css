@@ -1,6 +1,8 @@
 ﻿body {
     background: url(http://www.eeu.dk/templates/webitallskeleton/images/bodybg.jpg) center top no-repeat fixed #cacaca;
     background-size: cover;
+    margin-left: 5px;
+    margin-right: 5px;
 }
 .CheckboxRow {
     border: 2px solid #000000;
@@ -16,10 +18,47 @@
    border-radius: 8px 8px 0 0;
 }
 .square {
-    width: 26px;
+    /*width: 26px;*/
     height: 26px;
-    border: 1px solid black;
+    /*border: 1px solid black;*/
 
+}
+
+th, td {
+    border: 1px solid;
+    margin: 2px;
+    width: 3.2%;
+    height: 20px;
+    text-align: center;
+    background-color: whitesmoke;
+}
+
+th {
+    background: url(http://jackrugile.com/images/misc/noise-diagonal.png), linear-gradient(#777, #0D47A1);
+
+}
+
+.AbsenceTableBox {
+    background-color: #800000;
+    
+}
+
+.AbsenceTableBox p {
+    color: white;
+    height: 7px;
+}
+
+.UserNameTableBox p {
+    height: 7px;
+    font-weight: bold;
+}
+
+.UserNameTable td {
+    text-align: left;
+}
+
+.UserNameTable th {
+    height: 21.5px;
 }
 
 
