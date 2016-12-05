@@ -17,7 +17,7 @@ using ServiceGateways.ServiceGateways;
 
 namespace Fravaer_WebApp_Client.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Administrator")]
     public class UsersController : Controller
     {
         private IServiceGateway<User, int> _userServiceGateway = new ServiceGatewayFacade().GetUserServiceGateway();
@@ -81,7 +81,7 @@ namespace Fravaer_WebApp_Client.Controllers
             return View(viewModel);
         }
 
-        // GET: Employee/Create
+        // GET: Medarbejder/Create
         public ActionResult Create()
         {
             return View(new CreateUserViewModel()
@@ -91,7 +91,7 @@ namespace Fravaer_WebApp_Client.Controllers
             });
         }
 
-        // POST: Employee/Create
+        // POST: Medarbejder/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -122,7 +122,7 @@ namespace Fravaer_WebApp_Client.Controllers
             {
                 return HttpNotFound();
             }
-            return View(user);
+            return View(new CreateUserViewModel() {User = user, Departments = _departmentServiceGateway.ReadAll()});
         }
 
         // POST: User/Edit/5
@@ -130,14 +130,14 @@ namespace Fravaer_WebApp_Client.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,UserName,Password,Email")] User user)
+        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,UserName,Password,Email,Department,Role")] User user)
         {
             if (ModelState.IsValid)
             {
                 _userServiceGateway.Update(user);
                 return RedirectToAction("Index");
             }
-            return View(user);
+            return View(new CreateUserViewModel() { User = user, Departments = _departmentServiceGateway.ReadAll() });
         }
 
         // GET: User/Delete/5
