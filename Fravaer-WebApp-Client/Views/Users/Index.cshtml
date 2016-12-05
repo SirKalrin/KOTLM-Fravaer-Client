@@ -15,15 +15,15 @@
 <body>
 
     <div class="CheckboxRow col-md-2">
-            <h3>Medarbejdere:</h3>
-            @foreach (var item in Model.Departments)
+        <h3>Medarbejdere:</h3>
+        @foreach (var item in Model.Departments)
             {
-                <div>
-                    <input class="Checkbox" type="checkbox" checked="checked"/>
+            <div>
+                <input class="Checkbox" type="checkbox" checked="checked" />
 
-                    @Html.DisplayFor(modelItem => item.Name)
-                </div>
-            }
+                @Html.DisplayFor(modelItem => item.Name)
+            </div>
+        }
     </div>
     <div class="col-md-2">
         <table class="UserNameTable">
@@ -34,7 +34,12 @@
                 {
                     <tr>
                         <td class="UserNameTableBox">
-                            <p>@use.FirstName @use.LastName</p>
+                            <p>
+                                @Html.ActionLink(@use.FirstName + " " + use.LastName, "Details", new { id = use.Id }, new
+                           {
+                               style = "color: black"
+                           })
+                            </p>
                         </td>
                     </tr>
                 }
@@ -44,7 +49,7 @@
     <div class="Calendar col-md-6">
 
         <table>
-        
+
             @for (int i = 0; i < @Model.MonthDateTime.LastDayOfTheMonth().Day; i++)
             {
                 <th>@(i + 1)</th>

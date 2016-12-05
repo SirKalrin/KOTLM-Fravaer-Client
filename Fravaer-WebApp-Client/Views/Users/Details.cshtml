@@ -20,7 +20,7 @@
         <hr />
         <dl>
             <dt>
-                @Html.DisplayNameFor(model => model.User.FirstName)
+                Fornavn
             </dt>
 
             <dd>
@@ -28,7 +28,7 @@
             </dd>
 
             <dt>
-                @Html.DisplayNameFor(model => model.User.LastName)
+                Efternavn
             </dt>
 
             <dd>
@@ -36,7 +36,7 @@
             </dd>
 
             <dt>
-                @Html.DisplayNameFor(model => model.User.UserName)
+                Brugernavn
             </dt>
 
             <dd>
@@ -44,19 +44,48 @@
             </dd>
 
             <dt>
-                @Html.DisplayNameFor(model => model.User.Email)
+                Email
             </dt>
 
             <dd>
                 @Html.DisplayFor(model => model.User.Email)
             </dd>
+            
+            <dt>
+                Afdeling
+            </dt>
 
+            <dd>
+                @Html.DisplayFor(model => model.User.Department.Name)
+            </dd>
+            
+            <dt>
+                Rolle
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.User.Role)
+            </dd>
         </dl>
         <hr />
-        <p>
-            @Html.ActionLink("Edit", "Edit", new { id = Model.User.Id }) |
-            @Html.ActionLink("Back to List", "Index")
-        </p>
+        <div class="btn btn-success">
+            @Html.ActionLink("Redigier", "Edit", new {id = Model.User.Id}, new
+       {
+           style = "text-decoration:none; color:white;"
+       })
+        </div>
+        <div class="btn btn-danger">
+            @Html.ActionLink("Slet", "Delete", new {id = Model.User.Id}, new
+            {
+                style = "text-decoration:none; color:white;"
+            })
+        </div>
+        <div class="btn btn-warning">
+            @Html.ActionLink("Tilbage", "Index", null, new
+       {
+           style = "text-decoration:none; color:white;"
+       })
+        </div>
     </div>
 
     <div class="AbsenceCodeDiv col-lg-3">
