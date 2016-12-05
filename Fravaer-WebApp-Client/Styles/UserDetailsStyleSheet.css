@@ -1,12 +1,12 @@
 ﻿.CalendarDay {
     border: 1px solid #000000;
     height: 18%;
-    background-color: lightblue;
+    background-color: whitesmoke;
 
 }
 
 .CalendarDay:hover {
-    background-color: turquoise;
+    background-color: lightgray;
 }
 
 .CalendarDay h2 {

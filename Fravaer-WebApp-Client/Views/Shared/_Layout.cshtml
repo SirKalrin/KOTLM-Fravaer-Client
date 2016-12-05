@@ -17,6 +17,13 @@
     <header class="header">
         <div class="col-md-12" id="logo">
             <a href="/"><img src="http://eeu.dk/templates/webitallskeleton/images/dev/logo-dk.png"></a>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Min Side", "Details", "Users")</li>
+                    <li>@Html.ActionLink("Oversigt", "Index", "Users")</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
         </div>
     </header>
 <div style="width: 100%">
