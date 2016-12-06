@@ -19,7 +19,7 @@
             <a href="/"><img src="http://eeu.dk/templates/webitallskeleton/images/dev/logo-dk.png"></a>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Min Side", "Details", "Users")</li>
+                    <li>@Html.ActionLink("Min Side", "Details", "Users", new {id = 2}, null)</li>
                     <li>@Html.ActionLink("Oversigt", "Index", "Users")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")

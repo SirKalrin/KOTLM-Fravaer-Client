@@ -4,11 +4,8 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Afdelinger</h2>
 
-<p>
-    @Html.ActionLink("Ny Afdeling", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
@@ -17,17 +14,47 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.ActionLink("Redigier", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Detaljer", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Slet", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                <div class="btn btn-success">
+                    @Html.ActionLink("Detaljer", "Details", new { id = item.Id }, new
+               {
+                   style = "text-decoration:none; color:white;"
+               })
+                </div>
+
+                <div class="btn btn-warning">
+                    @Html.ActionLink("Redigier", "Edit", new { id = item.Id }, new
+               {
+                   style = "text-decoration:none; color:white;"
+               })
+                </div>
+                
+                <div class="btn btn-danger">
+                    @Html.ActionLink("Slet", "Delete", new { id = item.Id }, new
+                       {
+                           style = "text-decoration:none; color:white;"
+                       })
+                </div>
+            </td>
+        </tr>
+    }
 
 </table>
+<div class="btn btn-success">
+    @Html.ActionLink("Ny Afdeling", "Create", "Departments", null, new
+{
+    style = "text-decoration:none; color:white;"
+})
+</div>
+<div class="btn btn-warning">
+    @Html.ActionLink("Tilbage", "Index", "Users", null, new
+   {
+       style = "text-decoration:none; color:white;"
+   })
+</div>
