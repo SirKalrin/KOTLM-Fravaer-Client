@@ -15,18 +15,19 @@
 
 <body>
 
-    <div class="CheckboxRow col-md-2">
-            <h3>Medarbejdere:</h3>
-            @foreach (var item in Model.Departments)
-            {
-                <div>
-                    <input class="Checkbox" type="checkbox" checked="checked"/>
+<div class="CheckboxRow col-md-2">
+    <h3>Medarbejdere:</h3>
+    @foreach (var item in Model.Departments)
+    {
+        <div>
+            <input class="Checkbox" type="checkbox" checked="checked"/>
 
-                    @Html.DisplayFor(modelItem => item.Name)
-                </div>
-            }
-    </div>
-    <div class="col-md-2">
+            @Html.DisplayFor(modelItem => item.Name)
+        </div>
+    }
+</div>
+<div class="col-md-8" style="height: 100%">
+    <div class="col-md-3">
         <table class="UserNameTable">
             <tr><th>Navne</th></tr>
             @foreach (var dep in Model.Departments)
@@ -42,43 +43,47 @@
             }
         </table>
     </div>
-    <div class="Calendar col-md-6">
-
+    <div class="Calendar col-md-9">
         <table>
-        
             @for (int i = 0; i < @Model.MonthDateTime.LastDayOfTheMonth().Day; i++)
             {
                 <th>@(i + 1)</th>
             }
             <tbody>
-                @foreach (var department in Model.Departments)
+            @foreach (var department in Model.Departments)
             {
                 foreach (var user in department.Users)
                 {
-                        <tr>
-                            @for (int k = 1; k < @Model.MonthDateTime.LastDayOfTheMonth().Day + 1; k++)
+                    <tr>
+                        @for (int k = 1; k < @Model.MonthDateTime.LastDayOfTheMonth().Day + 1; k++)
+                        {
+                            if (@GetAbsenceForDate(k, user) != null)
                             {
-                                if (@GetAbsenceForDate(k, user) != null)
-                                {
-                                    <td class="AbsenceTableBox">
-                                        <p>@GetAbsenceForDate(k, user).Status</p>
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td></td>
-                                }
+                                <td class="AbsenceTableBox">
+                                    <p>@GetAbsenceForDate(k, user).Status</p>
+                                </td>
                             }
-                        </tr>
-                    }
+                            else
+                            {
+                                <td class="EmptyAbsenceTableBox"></td>
+                            }
+                        }
+                    </tr>
                 }
+            }
             </tbody>
         </table>
-        <div>
-            <hr class="between" />
-        </div>
-
     </div>
+    <hr class="between"/>
+    <hr class="between"/>
+    <hr class="between"/>
+    <hr class="between"/>
+    <hr class="between"/>
+    <hr class="between"/>
+    <hr class="between"/><hr class="between"/>
+    <hr class="between" />
+</div>
+
     <div class="Override col-md-2">
         <table class="OverrideTable">
             <h3>Overstyring</h3>
