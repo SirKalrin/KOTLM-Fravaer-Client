@@ -27,7 +27,7 @@
 th, td {
     border: 1px solid;
     margin: 2px;
-    width: 3.2%;
+    width: 3.3%;
     height: 20px;
     text-align: center;
     background-color: whitesmoke;
@@ -48,6 +48,10 @@ th {
     height: 7px;
 }
 
+.EmptyAbsenceTableBox:hover {
+    background-color: lightgray;
+}
+
 .UserNameTableBox p {
     height: 7px;
     font-weight: bold;
@@ -60,6 +64,7 @@ th {
 .UserNameTable th {
     height: 21.5px;
 }
+
 
 
 
