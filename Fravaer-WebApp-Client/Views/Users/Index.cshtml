@@ -19,9 +19,18 @@
         @foreach (var item in Model.Departments)
             {
             <div>
-                <input class="Checkbox" type="checkbox" checked="checked" />
+                @if (item.Id == 1 && item.Users.Any())
+                {
+                    <input class="Checkbox" type="checkbox" checked="checked" />
+                    @Html.DisplayFor(modelItem => item.Name)
+                }
+                @if (item.Id != 1)
+                {
+                    <input class="Checkbox" type="checkbox" checked="checked" />
+                    @Html.DisplayFor(modelItem => item.Name)
+                }
 
-                @Html.DisplayFor(modelItem => item.Name)
+
             </div>
         }
     </div>
