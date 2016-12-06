@@ -39,16 +39,16 @@
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.User.Password, "Password", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.User.Password, "Kodeord", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.User.Password, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.User.Password, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="form-group">
-            @Html.LabelFor(model => model.User.ConfirmPassword, "Bekræft Password", htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.User.ConfirmPassword, "Bekræft Kodeord", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.User.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.EditorFor(model => model.User.ConfirmPassword, Model.User.ConfirmPassword, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.User.ConfirmPassword, "", new { @class = "text-danger" })
             </div>
         </div>
@@ -77,7 +77,7 @@
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" value="Gem Ændringer" class="btn btn-success" />
                 <div class="btn btn-warning">
-                    @Html.ActionLink("Annuller", "Details", new {id = Model.User.Id}, new
+                    @Html.ActionLink("Annuller", "Details", new { id = Model.User.Id }, new
                {
                    style = "text-decoration:none; color:white;"
                })

@@ -96,7 +96,7 @@ namespace Fravaer_WebApp_Client.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,FirstName,LastName,UserName,Email,Department,Role")] User user)
+        public ActionResult Create([Bind(Include = "Id,FirstName,LastName,UserName,Email,Password,ConfirmPassword,Department,Role")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -118,6 +118,7 @@ namespace Fravaer_WebApp_Client.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             User user = _userServiceGateway.Read(id.Value);
+            user.ConfirmPassword = user.Password;
             if (user == null)
             {
                 return HttpNotFound();
@@ -130,7 +131,7 @@ namespace Fravaer_WebApp_Client.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,UserName,Password,Email,Department,Role")] User user)
+        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,UserName,Email,Password,ConfirmPassword,Department,Role")] User user)
         {
             if (ModelState.IsValid)
             {

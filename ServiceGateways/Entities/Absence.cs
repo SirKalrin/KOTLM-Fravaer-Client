@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -14,8 +15,10 @@ namespace ServiceGateways.Entities
 
     public class Absence : AbstractEntity
     {
+        [Required]
         public DateTime Date { get; set; }
+        [Required]
         public Statuses Status { get; set; }
-        
+        public User User { get; set; }
     }
 }
