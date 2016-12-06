@@ -5,10 +5,14 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
+using System.Web.Security;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using Fravaer_WebApp_Client.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
+using ServiceGateways.Entities;
 
 namespace Fravaer_WebApp_Client.Controllers
 {
@@ -147,29 +151,31 @@ namespace Fravaer_WebApp_Client.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register([Bind(Include = "Id,FirstName,LastName,UserName,Email,Password,ConfirmPassword,Department,Role")] User user)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
+                
+                var applicationUser = new ApplicationUser { UserName = user.UserName,  Email = user.Email, Roles = { new IdentityUserRole() {RoleId = user.Role.ToString(), UserId = user.Id.ToString()}}};
+                var result = await UserManager.CreateAsync(applicationUser, user.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(applicationUser, isPersistent:false, rememberBrowser:false);
+
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Create", "Users", new RouteValueDictionary(new { controller = "Users", action = "Create", User = user, FormMethod.Post }));
+
                 }
                 AddErrors(result);
             }
-
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return RedirectToAction("Create", "Users", new RouteValueDictionary(new { controller = "Users", action = "Create", User = user, FormMethod.Get }));
+
         }
 
         //
@@ -401,26 +407,6 @@ namespace Fravaer_WebApp_Client.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_userManager != null)
-                {
-                    _userManager.Dispose();
-                    _userManager = null;
-                }
-
-                if (_signInManager != null)
-                {
-                    _signInManager.Dispose();
-                    _signInManager = null;
-                }
-            }
-
-            base.Dispose(disposing);
         }
 
         #region Helpers

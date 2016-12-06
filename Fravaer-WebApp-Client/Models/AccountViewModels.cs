@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using ServiceGateways.Entities;
 
 namespace Fravaer_WebApp_Client.Models
 {
@@ -64,6 +65,7 @@ namespace Fravaer_WebApp_Client.Models
 
     public class RegisterViewModel
     {
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
