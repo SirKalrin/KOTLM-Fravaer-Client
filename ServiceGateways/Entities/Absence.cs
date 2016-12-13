@@ -10,7 +10,7 @@ namespace ServiceGateways.Entities
 {
     public enum Statuses
     {
-        S, HS, F, HF, FF, HFF, K, B, BS, AF, A, HA, SN
+        S = 0, HS = 1, F = 2, HF = 3, FF = 4, HFF = 5, K = 6, B = 7, BS = 8, AF = 9, A = 10, HA = 11, SN = 12
     }
 
     public class Absence : AbstractEntity

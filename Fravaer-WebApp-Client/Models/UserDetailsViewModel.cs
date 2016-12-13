@@ -16,6 +16,8 @@ namespace Fravaer_WebApp_Client.Models
         public User User { get; set; }
         public DateTime DateTime {get; set;}
         public int InitIndex { get; set; }
+        public ArrayList AbsenceTypes { get; set; }
+        public string ChosenAbsence { get; set; }
     }
 
 

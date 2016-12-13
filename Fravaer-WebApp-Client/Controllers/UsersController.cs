@@ -8,6 +8,8 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
+using BusinessLogic.Managers;
 using DateTimeExtensions;
 using Fravaer_WebApp_Client.Models;
 using ServiceGateways.Entities;
@@ -24,6 +26,8 @@ namespace Fravaer_WebApp_Client.Controllers
 
         private IServiceGateway<Department, int> _departmentServiceGateway =
             new ServiceGatewayFacade().GetDepartmentServiceGateway();
+        private IServiceGateway<Absence, int> _absenceServiceGateway = new ServiceGatewayFacade().GetAbsenceServiceGateway();
+        private UserManager _userManager = new UserManager();
 
         // GET: User
         public ActionResult Index()
@@ -39,46 +43,64 @@ namespace Fravaer_WebApp_Client.Controllers
         }
 
         // GET: User/Details/5
-        public ActionResult Details(int? id, DateTime? monthDate)
+        public ActionResult Details(int? id, DateTime? monthDate, string chosenAbsence)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
+            //read and checks the user
             User user = _userServiceGateway.Read(id.Value);
-            
             if (user == null)
             {
                 return HttpNotFound();
             }
-
-            // BLL LAYER!
-            var list = new ArrayList();
-            list.Add("Monday");
-            list.Add("Tuesday");
-            list.Add("Wednesday");
-            list.Add("Thursday");
-            list.Add("Friday");
-            list.Add("Saturday");
-            list.Add("Sunday");
-            //int index = list.IndexOf(new DateTime(2017, 2, 1).DayOfWeek.ToString());
-
+            
+            //Setting the dateTime
             DateTime monthShow = DateTime.Now;
-
             if (monthDate != null)
             {
                 monthShow = monthDate.Value;
             }
+            //Getting the index to start the month from
+            var initIndex = _userManager.GetInitIndex(monthShow);
+            //Getting the different types of absences + description
+            var absenceTypes = _userManager.GetAbsenceTypes();
 
-            int index = list.IndexOf(monthShow.DayOfWeek.ToString());
-
-            var viewModel = new UserDetailsViewModel() {
+            //Creating the ViewModel
+            var viewModel = new UserDetailsViewModel()
+            {
                 User = user,
                 DateTime = monthShow,
-                InitIndex = index};
+                InitIndex = initIndex,
+                AbsenceTypes = absenceTypes,
+                ChosenAbsence = chosenAbsence
+            };
 
             return View(viewModel);
+        }
+
+        [HttpPost]
+        public ActionResult Details(int? id, DateTime? monthDate, string absenceType, DateTime? absenceDate, int? deletableAbsenceId)
+        {
+            User user = _userServiceGateway.Read(id.Value);
+
+            //Either adds or deleted an absence
+            if (absenceType.Equals("Slet") && deletableAbsenceId != null)
+            {
+                _userManager.DeleteAbsenceFromUser(deletableAbsenceId.Value);
+            }
+            else if(absenceType.Equals("Slet"))
+            {
+                //Do nothing
+            }
+            else if(absenceDate != null && absenceType != null)
+            {
+                _userManager.AddAbsenceToUser(user, absenceDate, absenceType);
+            }
+
+            return RedirectToAction("Details", new RouteValueDictionary(new {id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType}));
         }
 
         // GET: Medarbejder/Create
@@ -96,7 +118,8 @@ namespace Fravaer_WebApp_Client.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,FirstName,LastName,UserName,Email,Password,ConfirmPassword,Department,Role")] User user)
+        public ActionResult Create(
+            [Bind(Include = "Id,FirstName,LastName,UserName,Email,Password,ConfirmPassword,Department,Role")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -106,7 +129,8 @@ namespace Fravaer_WebApp_Client.Controllers
 
             return View(new CreateUserViewModel()
             {
-                User = user, Departments = _departmentServiceGateway.ReadAll()
+                User = user,
+                Departments = _departmentServiceGateway.ReadAll()
             });
         }
 
@@ -131,14 +155,15 @@ namespace Fravaer_WebApp_Client.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,FirstName,LastName,UserName,Email,Password,ConfirmPassword,Department,Role")] User user)
+        public ActionResult Edit(
+            [Bind(Include = "Id,FirstName,LastName,UserName,Email,Password,ConfirmPassword,Department,Role")] User user)
         {
             if (ModelState.IsValid)
             {
                 _userServiceGateway.Update(user);
                 return RedirectToAction("Index");
             }
-            return View(new CreateUserViewModel() { User = user, Departments = _departmentServiceGateway.ReadAll() });
+            return View(new CreateUserViewModel() {User = user, Departments = _departmentServiceGateway.ReadAll()});
         }
 
         // GET: User/Delete/5
@@ -166,5 +191,6 @@ namespace Fravaer_WebApp_Client.Controllers
         }
 
 
+        
     }
 }

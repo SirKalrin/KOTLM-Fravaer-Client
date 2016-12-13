@@ -310,6 +310,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BusinessLogic\BusinessLogic.csproj">
+      <Project>{4821a14d-4850-442d-a24b-fba55f11b2d1}</Project>
+      <Name>BusinessLogic</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ServiceGateways\ServiceGateways.csproj">
       <Project>{e9679166-d33b-4089-9fbd-b5d56f998e59}</Project>
       <Name>ServiceGateways</Name>

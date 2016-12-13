@@ -1,4 +1,5 @@
-﻿@using System.Activities.Statements
+﻿@using System
+@using System.Activities.Statements
 @using DateTimeExtensions
 @using Fravaer_WebApp_Client.Models
 @using ServiceGateways.Entities
@@ -12,11 +13,14 @@
     <link href="~/Styles/UserDetailsStyleSheet.css" rel="stylesheet" type="text/css" />
 </head>
 
-<h2 align="center" style="margin-left: -53px">Detaljer</h2>
-<div>
 
-    <div class="UserDetailsDiv col-lg-2">
-        <h3>Information</h3>
+
+<div class="MainContainer">
+    <div class="col-sm-12">
+        <h2 align="center">-Kalender-</h2>
+    </div>
+    <div class="UserDetailsDiv col-lg-3">
+        <h1>Information</h1>
         <hr />
         <dl>
             <dt>
@@ -50,7 +54,7 @@
             <dd>
                 @Html.DisplayFor(model => model.User.Email)
             </dd>
-            
+
             <dt>
                 Afdeling
             </dt>
@@ -58,7 +62,7 @@
             <dd>
                 @Html.DisplayFor(model => model.User.Department.Name)
             </dd>
-            
+
             <dt>
                 Rolle
             </dt>
@@ -69,16 +73,16 @@
         </dl>
         <hr />
         <div class="btn btn-success">
-            @Html.ActionLink("Redigier", "Edit", new {id = Model.User.Id}, new
+            @Html.ActionLink("Redigier", "Edit", new { id = Model.User.Id }, new
        {
            style = "text-decoration:none; color:white;"
        })
         </div>
         <div class="btn btn-danger">
-            @Html.ActionLink("Slet", "Delete", new {id = Model.User.Id}, new
-            {
-                style = "text-decoration:none; color:white;"
-            })
+            @Html.ActionLink("Slet", "Delete", new { id = Model.User.Id }, new
+       {
+           style = "text-decoration:none; color:white;"
+       })
         </div>
         <div class="btn btn-warning">
             @Html.ActionLink("Tilbage", "Index", null, new
@@ -88,41 +92,17 @@
         </div>
     </div>
 
-    <div class="AbsenceCodeDiv col-lg-3">
-        <div>
-            <h3>Overstyrring</h3>
-            <input class="Checkbox" type="checkbox" />Tillad Overstyrring
-
-            <h3>Fraværskoder:</h3>
-            <input type="radio" name="absenceType"> S - Syg<br />
-            <input type="radio" name="absenceType"> HS - ½ygedag<br />
-            <input type="radio" name="absenceType"> F - Ferie<br />
-            <input type="radio" name="absenceType"> HF - ½feriedag<br />
-            <input type="radio" name="absenceType"> FF - Feriefridag<br />
-            <input type="radio" name="absenceType"> HFF - ½Feriefridag<br />
-            <input type="radio" name="absenceType"> K - Kursus<br />
-            <input type="radio" name="absenceType"> B - Barsel<br />
-            <input type="radio" name="absenceType"> BS - Barn 1. sygedag<br />
-            <input type="radio" name="absenceType"> AF - Andet fravær<br />
-            <input type="radio" name="absenceType"> A - Afspadsering<br />
-            <input type="radio" name="absenceType"> HA - ½afspadsering<br />
-            <input type="radio" name="absenceType"> SN - Seniordag<br />
-
-        </div>
-    </div>
-
-
-    <div class="Container col-lg-7" style="text-align: center">
+    <div class="Container col-lg-6" style="text-align: center">
 
         <div class="MonthsDiv col-md-12">
             <div class="col-md-4">
-                <a class="btn btn-success" href='@Url.Action("Details", "Users", new RouteValueDictionary(new {id = Model.User.Id, monthDate = Model.DateTime.AddMonths(-1)}))'>Forrige</a>
+                <a class="btn btn-success" href='@Url.Action("Details", "Users", new RouteValueDictionary(new {id = Model.User.Id, monthDate = Model.DateTime.AddMonths(-1), chosenAbsence = Model.ChosenAbsence}))'>Forrige</a>
             </div>
             <div class="col-md-4">
-                <p>@Model.DateTime.ToString("yyyy MMMM")</p>
+                <h3>@Model.DateTime.ToString("yyyy MMMM")</h3>
             </div>
             <div class="col-md-4">
-                <a class="btn btn-success" href='@Url.Action("Details", "Users", new RouteValueDictionary( new { id = Model.User.Id, monthDate = Model.DateTime.AddMonths(1)}))'>Næste</a>
+                <a class="btn btn-success" href='@Url.Action("Details", "Users", new RouteValueDictionary(new {id = Model.User.Id, monthDate = Model.DateTime.AddMonths(1), chosenAbsence = Model.ChosenAbsence}))'>Næste</a>
             </div>
         </div>
 
@@ -148,7 +128,7 @@
             <p>Søn</p>
         </div>
 
-        @for (int i = 0; i < 6; i++)
+        @for (int i = 0; i < GetWeekCountFromMonth(); i++)
         {
             if (i == 0)
             {
@@ -171,20 +151,42 @@
                 if (s + Model.InitIndex == (7 * (i + 1)) - 1 || s + Model.InitIndex == 7 * (i + 1))
                 {
                     <div class="WeekEnd col-md-1">
-                        <h2>@s</h2>
+                        <p>@s</p>
                     </div>
                 }
                 else
                 {
                     <div class="CalendarDay col-md-2">
-                        <h2>@s</h2>
-                        @if (s < Model.DateTime.LastDayOfTheMonth().Day)
+                        <p align="left">@s</p>
+                        @if (s <= Model.DateTime.LastDayOfTheMonth().Day)
                         {
                             if (GetAbsenceForDate(s) != null)
                             {
-                                <div class="AbsenceLbl">
-                                    <p>@GetAbsenceForDate(s).Status.ToString()</p>
-                                </div>
+                                <form method="post" action="@Url.Action("Details", "Users", new RouteValueDictionary(
+                                                            new
+                                                            {
+                                                                id = @Model.User.Id,
+                                                                monthDate = @Model.DateTime.FirstDayOfTheMonth(),
+                                                                absenceType = @Model.ChosenAbsence,
+                                                                deletableAbsenceId = GetAbsenceForDate(s).Id
+                                                            }))">
+                                    <input class="AbsenceLbl" type="submit" value="@GetAbsenceForDate(s).Status.ToString()">
+                                </form>
+
+                            }
+                            else
+                            {
+                                <form method="post" action="@Url.Action("Details", "Users", new RouteValueDictionary(
+                                                            new
+                                                            {
+                                                                id = @Model.User.Id,
+                                                                monthDate = @Model.DateTime.FirstDayOfTheMonth(),
+                                                                absenceType = @Model.ChosenAbsence,
+                                                                absenceDate = Model.DateTime.FirstDayOfTheMonth().AddDays(s - 1)
+                                                            }))">
+
+                                    <input class="btn btn-default btn-circle" type="submit" value="+">
+                                </form>
                             }
                         }
 
@@ -203,20 +205,38 @@
                             <div class="col-md-2 GrayDiv"></div>
                         }
                     }
-                    return;
+                    break;
                 }
             }
         }
     </div>
 
-    
+    <div class="AbsenceCodeDiv col-lg-3">
+        <h1>Fraværskoder:</h1>
+        <hr />
+        @foreach (var absence in Model.AbsenceTypes)
+            {
+                if (Model.ChosenAbsence != null && absence.Equals(Model.ChosenAbsence))
+                {
+                <input type="radio" name="absenceType" checked="checked">
+                @absence
+                <br />
+            }
+            else
+            {
+                <input type="radio" name="absenceType" onclick="location.href =
+                    '@Url.Action("Details", "Users", new RouteValueDictionary(new {id = @Model.User.Id,
+                    monthDate = Model.DateTime.FirstDayOfTheMonth(), chosenAbsence = absence}))'" />
+                    @absence
+                    <br />
+            }
+        }
+        <hr />
+    </div>
+</div>
 
-    
-
-
-
-    @functions
-    {
+@functions
+{
 
         public Absence GetAbsenceForDate(int day)
         {
@@ -236,11 +256,19 @@
             {
                 return (i * 7) + 1 - Model.InitIndex;
             }
+
         }
 
-    }
-</div>
+        public int GetWeekCountFromMonth()
+        {
+            if (Model.DateTime.LastDayOfTheMonth().Day > 30 && Model.InitIndex > 4 || Model.DateTime.LastDayOfTheMonth().Day > 29 && Model.InitIndex > 5)
+            {
+                return 6;
+            }
+            else
+            {
+                return 5;
+            }
+        }
 
-
-
-
+}
