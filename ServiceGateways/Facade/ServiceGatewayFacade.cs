@@ -1,4 +1,5 @@
-﻿using ServiceGateways.Entities;
+﻿using System.Net.Http;
+using ServiceGateways.Entities;
 using ServiceGateways.Interfaces;
 using ServiceGateways.ServiceGateways;
 
@@ -9,6 +10,7 @@ namespace ServiceGateways.Facade
         private IServiceGateway<Absence, int> _absenceGateway;
         private IServiceGateway<Department, int> _departmentGateway;
         private IServiceGateway<User, int> _userGateway;
+        private IAuthorizationServiceGateway _authorizationServiceGateway;
 
         public IServiceGateway<Absence, int> GetAbsenceServiceGateway()
         {
@@ -23,6 +25,11 @@ namespace ServiceGateways.Facade
         public IServiceGateway<User, int> GetUserServiceGateway()
         {
             return _userGateway ?? (_userGateway = new UserServiceGateway());
+        }
+
+        public IAuthorizationServiceGateway GetAuthorisationServiceGateway()
+        {
+            return _authorizationServiceGateway ?? (_authorizationServiceGateway = new AuthorizationServiceGateway());
         }
     }
 }

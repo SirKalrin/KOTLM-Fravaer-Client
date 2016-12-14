@@ -50,13 +50,12 @@ namespace Fravaer_WebApp_Client.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Brugernavn")]
+        public string UserName { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Password")]
+        [Display(Name = "Kodeord")]
         public string Password { get; set; }
 
         [Display(Name = "Remember me?")]
