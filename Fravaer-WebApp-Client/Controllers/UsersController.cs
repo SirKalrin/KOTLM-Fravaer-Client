@@ -43,6 +43,9 @@ namespace Fravaer_WebApp_Client.Controllers
         }
 
         // GET: User/Details/5
+        /* Return the DetailsView, which visualizes the user with the given id, 
+         and show its absences in the given month, 
+         and select the chosenAbsence type if one is given*/
         public ActionResult Details(int? id, DateTime? monthDate, string chosenAbsence)
         {
             if (id == null)
@@ -68,6 +71,8 @@ namespace Fravaer_WebApp_Client.Controllers
             //Getting the different types of absences + description
             var absenceTypes = _userManager.GetAbsenceTypes();
 
+            
+
             //Creating the ViewModel
             var viewModel = new UserDetailsViewModel()
             {
@@ -75,12 +80,15 @@ namespace Fravaer_WebApp_Client.Controllers
                 DateTime = monthShow,
                 InitIndex = initIndex,
                 AbsenceTypes = absenceTypes,
-                ChosenAbsence = chosenAbsence
+                ChosenAbsence = chosenAbsence,
             };
 
             return View(viewModel);
         }
 
+        /* This POST method deleted an absence if an absence Id is given with the absence type of delete, 
+         or creates an absence if the above criterias isnt met an absence DateTime and absence type is given, 
+         where it redirect to DetailsView afterwards*/ 
         [HttpPost]
         public ActionResult Details(int? id, DateTime? monthDate, string absenceType, DateTime? absenceDate, int? deletableAbsenceId)
         {
@@ -190,7 +198,23 @@ namespace Fravaer_WebApp_Client.Controllers
             return RedirectToAction("Index");
         }
 
-
+        [HttpPost]
+        public ActionResult AddGrayDaysToUser(int? id, DateTime dateFrom, DateTime dateEnd, List<string> chosenDays)
+        {
+            var user = _userServiceGateway.Read(id.Value);
+            for (DateTime i = dateFrom; i <= dateEnd;)
+            {
+                foreach (var dayType in chosenDays)
+                {
+                    if (i.DayOfWeek.ToString().Equals(dayType))
+                    {
+                        _userManager.AddAbsenceToUser(user, i, Statuses.GRAY.ToString());
+                    }
+                }
+                i = i.AddDays(1);
+            }
+            return RedirectToAction("Details", new RouteValueDictionary(new { id = id.Value, monthDate = dateFrom}));
+        }
         
     }
 }

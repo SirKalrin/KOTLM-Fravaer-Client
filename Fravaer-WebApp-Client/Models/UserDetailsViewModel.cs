@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Eventing.Reader;
 using System.Dynamic;
 using System.Linq;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
@@ -18,6 +19,7 @@ namespace Fravaer_WebApp_Client.Models
         public int InitIndex { get; set; }
         public ArrayList AbsenceTypes { get; set; }
         public string ChosenAbsence { get; set; }
+        public bool[] GrayDays { get; set; }
     }
 
 
