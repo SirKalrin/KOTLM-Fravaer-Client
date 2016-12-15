@@ -14,6 +14,7 @@ namespace BusinessLogic.Managers
     public class UserManager
     {
         private IServiceGateway<Absence, int> _absenceServiceGateway = new ServiceGatewayFacade().GetAbsenceServiceGateway();
+        private IServiceGateway<User, int> _userServiceGateway = new ServiceGatewayFacade().GetUserServiceGateway();
 
 
         /* 
@@ -42,9 +43,11 @@ namespace BusinessLogic.Managers
 
 
         /* This method adds the given user to an absence and calls the gateway to save the absence. */
-        public void AddAbsenceToUser(User user, DateTime? absenceDate, string chosenAbsence)
+        public void AddAbsenceToUser(int id, DateTime? absenceDate, string chosenAbsence)
         {
-                    var newAbsence = new Absence()
+            User user = _userServiceGateway.Read(id);
+
+            var newAbsence = new Absence()
                     {
                         Date = absenceDate.Value,
                         Status = GetStatus(chosenAbsence, _typeList),
@@ -105,6 +108,45 @@ namespace BusinessLogic.Managers
         public int GetInitIndex(DateTime chosenMonth)
         {
             return _daysList.IndexOf(chosenMonth.FirstDayOfTheMonth().DayOfWeek.ToString());
+        }
+
+        /* UserDetails html helper method*/
+        /* Returns the starting index for placing the first day of the month*/
+        public int GetStartIndex(int i, int initIndex)
+        {
+            int result = (i * 7) - initIndex;
+
+            if (result < 0)
+            {
+                return (i * 7) + 1;
+            }
+            else
+            {
+                return (i * 7) + 1 - initIndex;
+            }
+
+        }
+
+        /* UserDetails html helper method*/
+        /* Returns an absence if on is present with the given dateTime*/
+        public Absence GetAbsenceForDate(int day, DateTime dateTime, List<Absence> absences )
+        {
+            DateTime eventDate = new DateTime(dateTime.Year, dateTime.Month, day);
+            return absences.FirstOrDefault(x => x.Date == eventDate);
+        }
+
+        /* UserDetails html helper method*/
+        /* Get the number of weeks on the given month*/
+        public int GetWeekCountFromMonth(DateTime dateTime, int initIndex)
+        {
+            if (dateTime.LastDayOfTheMonth().Day > 30 && initIndex > 4 || dateTime.LastDayOfTheMonth().Day > 29 && initIndex > 5)
+            {
+                return 6;
+            }
+            else
+            {
+                return 5;
+            }
         }
     }
 }

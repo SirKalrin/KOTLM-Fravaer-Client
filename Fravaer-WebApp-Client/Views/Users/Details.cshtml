@@ -10,17 +10,14 @@
     ViewBag.Title = "Details";
 }
 
-<head>
-    <link href="~/Styles/UserDetailsStyleSheet.css" rel="stylesheet" type="text/css" />
-</head>
-
+<section><link href="~/Styles/UserDetailsStyleSheet.css" rel="stylesheet" type="text/css" /></section>
 
 
 <div class="MainContainer">
-    <div class="col-sm-12">
+    <div class="col-xs-12">
         <h2 align="center">-Kalender-</h2>
     </div>
-    <div class="UserDetailsDiv col-lg-3">
+    <div class="UserDetailsDiv col-xs-3">
         <h1>Information</h1>
         <hr />
         <dl>
@@ -93,39 +90,39 @@
         </div>
     </div>
 
-    <div class="Container col-lg-6" style="text-align: center">
+    <div class="CalendarContainer col-xs-6" style="text-align: center">
 
-        <div class="MonthsDiv col-md-12">
-            <div class="col-md-4">
-                <a class="btn btn-success" href='@Url.Action("Details", "Users", new RouteValueDictionary(new {id = Model.User.Id, monthDate = Model.DateTime.AddMonths(-1), chosenAbsence = Model.ChosenAbsence}))'>Forrige</a>
+        <div class="MonthsDiv col-xs-12">
+            <div class="col-xs-4 next-previous-btn">
+                <a href='@Url.Action("Details", "Users", new RouteValueDictionary(new {id = Model.User.Id, monthDate = Model.DateTime.AddMonths(-1), chosenAbsence = Model.ChosenAbsence}))'>Forrige</a>
             </div>
-            <div class="col-md-4">
+            <div class="col-xs-4">
                 <h3>@Model.DateTime.ToString("yyyy MMMM")</h3>
             </div>
-            <div class="col-md-4">
-                <a class="btn btn-success" href='@Url.Action("Details", "Users", new RouteValueDictionary(new {id = Model.User.Id, monthDate = Model.DateTime.AddMonths(1), chosenAbsence = Model.ChosenAbsence}))'>Næste</a>
+            <div class="col-xs-4 next-previous-btn">
+                <a href='@Url.Action("Details", "Users", new RouteValueDictionary(new {id = Model.User.Id, monthDate = Model.DateTime.AddMonths(1), chosenAbsence = Model.ChosenAbsence}))'>Næste</a>
             </div>
         </div>
 
-        <div class="WeekDay col-md-2">
-            <p>Mandag</p>
+        <div class="WeekDay col-xs-2">
+            <p>Man</p>
         </div>
-        <div class="WeekDay col-md-2">
-            <p>Tirsdag</p>
+        <div class="WeekDay col-xs-2">
+            <p>Tir</p>
         </div>
-        <div class="WeekDay col-md-2">
-            <p>Onsdag</p>
+        <div class="WeekDay col-xs-2">
+            <p>Ons</p>
         </div>
-        <div class="WeekDay col-md-2">
-            <p>Torsdag</p>
+        <div class="WeekDay col-xs-2">
+            <p>Tor</p>
         </div>
-        <div class="WeekDay col-md-2">
-            <p>Fredag</p>
+        <div class="WeekDay col-xs-2">
+            <p>Fre</p>
         </div>
-        <div class="WeekEndDay col-md-1">
+        <div class="WeekEndDay col-xs-1">
             <p>Lør</p>
         </div>
-        <div class="WeekEndDay col-md-1">
+        <div class="WeekEndDay col-xs-1">
             <p>Søn</p>
         </div>
 
@@ -138,20 +135,20 @@
 
                     if (j == (7 * (i + 1)) - 1 || j == 7 * (i + 1) - 2)
                     {
-                        <div class="WeekEnd col-md-1"></div>
+                        <div class="WeekEnd col-xs-1"></div>
                     }
                     else
                     {
-                        <div class="col-md-2 GrayDiv"></div>
+                        <div class="col-xs-2 GrayDiv"></div>
                     }
                 }
             }
 
             for (int s = GetStartIndex(i); s <= (i + 1) * 7 - Model.InitIndex; s++)
             {
-                if (s + Model.InitIndex == (7*(i + 1)) - 1 || s + Model.InitIndex == 7*(i + 1))
+                if (s + Model.InitIndex == (7 * (i + 1)) - 1 || s + Model.InitIndex == 7 * (i + 1))
                 {
-                    <div class="WeekEnd col-md-1">
+                    <div class="WeekEnd col-xs-1">
                         <p>@s</p>
                     </div>
                 }
@@ -159,19 +156,19 @@
                 {
                     if (GetAbsenceForDate(s) != null && GetAbsenceForDate(s).Status.Equals(Statuses.GRAY))
                     {
-                        <div class="WeekEnd col-md-2">
+                        <div class="WeekEnd col-xs-2">
                             <p>@s</p>
                         </div>
                     }
                     else
                     {
-                            <div class="CalendarDay col-md-2">
-                                <p align="left">@s</p>
-                                @if (s <= Model.DateTime.LastDayOfTheMonth().Day)
+                        <div class="CalendarDay col-xs-2">
+                            <p align="left">@s</p>
+                            @if (s <= Model.DateTime.LastDayOfTheMonth().Day)
+                            {
+                                if (GetAbsenceForDate(s) != null)
                                 {
-                                    if (GetAbsenceForDate(s) != null)
-                                    {
-                                        <form method="post" action="@Url.Action("Details", "Users", new RouteValueDictionary(
+                                    <form method="post" action="@Url.Action("Details", "Users", new RouteValueDictionary(
                                                                         new
                                                                         {
                                                                             id = @Model.User.Id,
@@ -179,40 +176,40 @@
                                                                             absenceType = @Model.ChosenAbsence,
                                                                             deletableAbsenceId = GetAbsenceForDate(s).Id
                                                                         }))">
-                                            <input class="AbsenceLbl" type="submit" value="@GetAbsenceForDate(s).Status.ToString()">
-                                        </form>
-                                    }
-                                    else
-                                    {
-                                        <form method="post" action="@Url.Action("Details", "Users", new RouteValueDictionary(
-                                                                        new
-                                                                        {
-                                                                            id = @Model.User.Id,
-                                                                            monthDate = @Model.DateTime.FirstDayOfTheMonth(),
-                                                                            absenceType = @Model.ChosenAbsence,
-                                                                            absenceDate = Model.DateTime.FirstDayOfTheMonth().AddDays(s - 1)
-                                                                        }))">
-
-                                            <input class="btn btn-default btn-circle" type="submit" value="+">
-                                        </form>
-                                    }
-
+                                        <input class="AbsenceLbl" type="submit" value="@GetAbsenceForDate(s).Status.ToString()">
+                                    </form>
+                                }
+                                else
+                                {
+                                    <form method="post" action="@Url.Action("Details", "Users", new RouteValueDictionary(
+                                                                    new
+                                                                    {
+                                                                        id = @Model.User.Id,
+                                                                        monthDate = @Model.DateTime.FirstDayOfTheMonth(),
+                                                                        absenceType = @Model.ChosenAbsence,
+                                                                        absenceDate = Model.DateTime.FirstDayOfTheMonth().AddDays(s - 1)
+                                                                    }))">
+                                        @Html.AntiForgeryToken()
+                                        <input class="AddLabel" type="submit" value="+">
+                                    </form>
                                 }
 
-                            </div>
-                        }
+                            }
+
+                        </div>
                     }
+                }
                 if (s == Model.DateTime.LastDayOfTheMonth().Day)
                 {
                     for (int m = s + Model.InitIndex; m < (i + 1) * 7; m++)
                     {
                         if (m == (7 * (i + 1)) - 1 || m == 7 * (i + 1) - 2)
                         {
-                            <div class="WeekEnd col-md-1"></div>
+                            <div class="WeekEnd col-xs-1"></div>
                         }
                         else
                         {
-                            <div class="col-md-2 GrayDiv"></div>
+                            <div class="col-xs-2 GrayDiv"></div>
                         }
                     }
                     break;
@@ -221,7 +218,7 @@
         }
     </div>
 
-    <div class="AbsenceCodeDiv col-lg-3">
+    <div class="AbsenceCodeDiv col-xs-3">
         <h1>Fraværskoder:</h1>
         <hr />
         @foreach (var absence in Model.AbsenceTypes)
@@ -288,79 +285,17 @@
 
     public Absence GetAbsenceForDate(int day)
     {
-        DateTime eventDate = new DateTime(@Model.DateTime.Year, @Model.DateTime.Month, day);
-        return Model.User.Absences.FirstOrDefault(x => x.Date == eventDate);
+        return new UserManager().GetAbsenceForDate(day, Model.DateTime, Model.User.Absences);
     }
 
     public int GetStartIndex(int i)
     {
-        int result = (i * 7) - Model.InitIndex;
-
-        if (result < 0)
-        {
-            return (i * 7) + 1;
-        }
-        else
-        {
-            return (i * 7) + 1 - Model.InitIndex;
-        }
-
+        return new UserManager().GetStartIndex(i, Model.InitIndex);
     }
 
     public int GetWeekCountFromMonth()
     {
-        if (Model.DateTime.LastDayOfTheMonth().Day > 30 && Model.InitIndex > 4 || Model.DateTime.LastDayOfTheMonth().Day > 29 && Model.InitIndex > 5)
-        {
-            return 6;
-        }
-        else
-        {
-            return 5;
-        }
-    }
-
-    public bool IsChecked()
-    {
-        if (Model.ChosenAbsence != null && Model.ChosenAbsence.Equals("GRAY"))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public bool IsAGrayDay(int day)
-    {
-        DateTime eventDate = new DateTime(@Model.DateTime.Year, @Model.DateTime.Month, day);
-        var index = -1;
-        switch (eventDate.ToString())
-        {
-            case "Monday":
-                index = 0;
-                break;
-            case "Tuesday":
-                index = 1;
-                break;
-            case "Wednesday":
-                index = 2;
-                break;
-            case "Thuesday":
-                index = 3;
-                break;
-            case "Friday":
-                index = 4;
-                break;
-            case "Saturday":
-                index = 5;
-                break;
-            case "Sunday":
-                index = 6;
-                break;
-        }
-        if (index != -1)
-        {
-            return Model.GrayDays[index];
-        }
-        return false;
+        return new UserManager().GetWeekCountFromMonth(Model.DateTime, Model.InitIndex);
     }
 
 }
