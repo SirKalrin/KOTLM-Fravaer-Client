@@ -171,7 +171,7 @@
                                 {
                                     if (GetAbsenceForDate(s) != null)
                                     {
-                                        <form method="post" action="@Url.Action("Details", "Users", new RouteValueDictionary(
+                                        <form method="post" action="@Url.Action("DeleteAbsence", "Users", new RouteValueDictionary(
                                                                         new
                                                                         {
                                                                             id = @Model.User.Id,
@@ -179,12 +179,13 @@
                                                                             absenceType = @Model.ChosenAbsence,
                                                                             deletableAbsenceId = GetAbsenceForDate(s).Id
                                                                         }))">
+                                            @Html.AntiForgeryToken()
                                             <input class="AbsenceLbl" type="submit" value="@GetAbsenceForDate(s).Status.ToString()">
                                         </form>
                                     }
                                     else
                                     {
-                                        <form method="post" action="@Url.Action("Details", "Users", new RouteValueDictionary(
+                                        <form method="post" action="@Url.Action("CreateAbsence", "Users", new RouteValueDictionary(
                                                                         new
                                                                         {
                                                                             id = @Model.User.Id,
@@ -192,7 +193,7 @@
                                                                             absenceType = @Model.ChosenAbsence,
                                                                             absenceDate = Model.DateTime.FirstDayOfTheMonth().AddDays(s - 1)
                                                                         }))">
-
+                                            @Html.AntiForgeryToken()
                                             <input class="btn btn-default btn-circle" type="submit" value="+">
                                         </form>
                                     }
@@ -272,7 +273,7 @@
             <div class="intervalStart col-xs-12">
                 <input type="date" name="dateFrom" />
             </div>
-            <p style="font-weight: bold">   Slut dato:</pstyle="font-weight:>
+            <p style="font-weight: bold">   Slut dato:</p>
             <div class="intervalStart col-xs-12">
                 <input type="date" name="dateEnd" />
             </div>
@@ -288,79 +289,17 @@
 
     public Absence GetAbsenceForDate(int day)
     {
-        DateTime eventDate = new DateTime(@Model.DateTime.Year, @Model.DateTime.Month, day);
-        return Model.User.Absences.FirstOrDefault(x => x.Date == eventDate);
+        return new UserManager().GetAbsenceForDate(day, Model.DateTime, Model.User.Absences);
     }
 
     public int GetStartIndex(int i)
     {
-        int result = (i * 7) - Model.InitIndex;
-
-        if (result < 0)
-        {
-            return (i * 7) + 1;
-        }
-        else
-        {
-            return (i * 7) + 1 - Model.InitIndex;
-        }
-
+        return new UserManager().GetStartIndex(i, Model.InitIndex);
     }
 
     public int GetWeekCountFromMonth()
     {
-        if (Model.DateTime.LastDayOfTheMonth().Day > 30 && Model.InitIndex > 4 || Model.DateTime.LastDayOfTheMonth().Day > 29 && Model.InitIndex > 5)
-        {
-            return 6;
-        }
-        else
-        {
-            return 5;
-        }
-    }
-
-    public bool IsChecked()
-    {
-        if (Model.ChosenAbsence != null && Model.ChosenAbsence.Equals("GRAY"))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public bool IsAGrayDay(int day)
-    {
-        DateTime eventDate = new DateTime(@Model.DateTime.Year, @Model.DateTime.Month, day);
-        var index = -1;
-        switch (eventDate.ToString())
-        {
-            case "Monday":
-                index = 0;
-                break;
-            case "Tuesday":
-                index = 1;
-                break;
-            case "Wednesday":
-                index = 2;
-                break;
-            case "Thuesday":
-                index = 3;
-                break;
-            case "Friday":
-                index = 4;
-                break;
-            case "Saturday":
-                index = 5;
-                break;
-            case "Sunday":
-                index = 6;
-                break;
-        }
-        if (index != -1)
-        {
-            return Model.GrayDays[index];
-        }
-        return false;
+        return new UserManager().GetWeekCountFromMonth(Model.DateTime, Model.InitIndex);
     }
 
 }
