@@ -35,6 +35,7 @@ namespace Fravaer_WebApp_Client.Controllers
 
         private IAuthorizationServiceGateway _authorizationServiceGateway = new ServiceGatewayFacade().GetAuthorisationServiceGateway();
 
+        private string _deleteType = "Slet";
         // GET: User
         public ActionResult Index()
         {
@@ -98,23 +99,23 @@ namespace Fravaer_WebApp_Client.Controllers
         [HttpPost]
         public ActionResult Details(int? id, DateTime? monthDate, string absenceType, DateTime? absenceDate, int? deletableAbsenceId)
         {
-            User user = _userServiceGateway.Read(id.Value);
+            //User user = _userServiceGateway.Read(id.Value);
 
-            //Either adds or deleted an absence
-            if (absenceType.Equals("Slet") && deletableAbsenceId != null)
-            {
-                _userManager.DeleteAbsenceFromUser(deletableAbsenceId.Value);
-            }
-            else if (absenceType.Equals("Slet"))
-            {
-                //Do nothing
-            }
-            else if (absenceDate != null && absenceType != null)
-            {
-                _userManager.AddAbsenceToUser(user, absenceDate, absenceType);
-            }
+            ////Either adds or deleted an absence
+            //if (absenceType.Equals("Slet") && deletableAbsenceId != null)
+            //{
+            //    _userManager.DeleteAbsenceFromUser(deletableAbsenceId.Value);
+            //}
+            //else if(absenceType.Equals("Slet"))
+            //{
+            //    //Do nothing
+            //}
+            //else if(absenceDate != null && absenceType != null)
+            //{
+            //    _userManager.AddAbsenceToUser(user, absenceDate, absenceType);
+            //}
 
-            return RedirectToAction("Details", new RouteValueDictionary(new { id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType }));
+            return RedirectToAction("Details", "Users", new RouteValueDictionary(new {id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType}));
         }
 
         // GET: Medarbejder/Create
@@ -209,19 +210,50 @@ namespace Fravaer_WebApp_Client.Controllers
         [HttpPost]
         public ActionResult AddGrayDaysToUser(int? id, DateTime dateFrom, DateTime dateEnd, List<string> chosenDays)
         {
-            var user = _userServiceGateway.Read(id.Value);
             for (DateTime i = dateFrom; i <= dateEnd;)
             {
                 foreach (var dayType in chosenDays)
                 {
                     if (i.DayOfWeek.ToString().Equals(dayType))
                     {
-                        _userManager.AddAbsenceToUser(user, i, Statuses.GRAY.ToString());
+                        _userManager.AddAbsenceToUser(id.Value, i, Statuses.GRAY.ToString());
                     }
                 }
                 i = i.AddDays(1);
             }
             return RedirectToAction("Details", new RouteValueDictionary(new { id = id.Value, monthDate = dateFrom }));
+        }
+
+        // POST: Absences/Delete/5
+        //Deletes the absence with the given deletableAbsenceId and redirects to the details view.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteAbsence(int? id, DateTime? monthDate, string absenceType, DateTime? absenceDate, int? deletableAbsenceId)
+        {
+            if (absenceType.Equals(_deleteType) && deletableAbsenceId != null)
+            {
+                _absenceServiceGateway.Delete(deletableAbsenceId.Value);
+            }
+
+            return RedirectToAction("Details", "Users", new RouteValueDictionary(new { id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType }));
+        }
+
+        // POST: Absences/Create
+        // Calls the userManager to create an absence with the given variables and redirects to the detailsView.
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateAbsence(int? id, DateTime? monthDate, string absenceType, DateTime? absenceDate, int? deletableAbsenceId)
+        {
+
+            if (absenceDate != null && absenceType != null && absenceType != _deleteType)
+            {
+                _userManager.AddAbsenceToUser(id.Value, absenceDate, absenceType);
+            }
+
+            return RedirectToAction("Details", "Users", new RouteValueDictionary(new { id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType }));
+
         }
 
     }

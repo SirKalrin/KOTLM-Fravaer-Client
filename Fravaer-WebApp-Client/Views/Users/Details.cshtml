@@ -11,9 +11,6 @@
 }
 
 <section><link href="~/Styles/UserDetailsStyleSheet.css" rel="stylesheet" type="text/css" /></section>
-@*@section scripts {
-        <link href="~/Styles/UserDetailsStyleSheet.css" rel="stylesheet" type="text/css" />
-    }*@
 
 
 <div class="MainContainer">
@@ -185,13 +182,14 @@
                                 else
                                 {
                                     <form method="post" action="@Url.Action("Details", "Users", new RouteValueDictionary(
-                                                                        new
-                                                                        {
-                                                                            id = @Model.User.Id,
-                                                                            monthDate = @Model.DateTime.FirstDayOfTheMonth(),
-                                                                            absenceType = @Model.ChosenAbsence,
-                                                                            absenceDate = Model.DateTime.FirstDayOfTheMonth().AddDays(s - 1)
-                                                                        }))">
+                                                                    new
+                                                                    {
+                                                                        id = @Model.User.Id,
+                                                                        monthDate = @Model.DateTime.FirstDayOfTheMonth(),
+                                                                        absenceType = @Model.ChosenAbsence,
+                                                                        absenceDate = Model.DateTime.FirstDayOfTheMonth().AddDays(s - 1)
+                                                                    }))">
+                                        @Html.AntiForgeryToken()
                                         <input class="AddLabel" type="submit" value="+">
                                     </form>
                                 }
@@ -287,79 +285,17 @@
 
     public Absence GetAbsenceForDate(int day)
     {
-        DateTime eventDate = new DateTime(@Model.DateTime.Year, @Model.DateTime.Month, day);
-        return Model.User.Absences.FirstOrDefault(x => x.Date == eventDate);
+        return new UserManager().GetAbsenceForDate(day, Model.DateTime, Model.User.Absences);
     }
 
     public int GetStartIndex(int i)
     {
-        int result = (i * 7) - Model.InitIndex;
-
-        if (result < 0)
-        {
-            return (i * 7) + 1;
-        }
-        else
-        {
-            return (i * 7) + 1 - Model.InitIndex;
-        }
-
+        return new UserManager().GetStartIndex(i, Model.InitIndex);
     }
 
     public int GetWeekCountFromMonth()
     {
-        if (Model.DateTime.LastDayOfTheMonth().Day > 30 && Model.InitIndex > 4 || Model.DateTime.LastDayOfTheMonth().Day > 29 && Model.InitIndex > 5)
-        {
-            return 6;
-        }
-        else
-        {
-            return 5;
-        }
-    }
-
-    public bool IsChecked()
-    {
-        if (Model.ChosenAbsence != null && Model.ChosenAbsence.Equals("GRAY"))
-        {
-            return true;
-        }
-        return false;
-    }
-
-    public bool IsAGrayDay(int day)
-    {
-        DateTime eventDate = new DateTime(@Model.DateTime.Year, @Model.DateTime.Month, day);
-        var index = -1;
-        switch (eventDate.ToString())
-        {
-            case "Monday":
-                index = 0;
-                break;
-            case "Tuesday":
-                index = 1;
-                break;
-            case "Wednesday":
-                index = 2;
-                break;
-            case "Thuesday":
-                index = 3;
-                break;
-            case "Friday":
-                index = 4;
-                break;
-            case "Saturday":
-                index = 5;
-                break;
-            case "Sunday":
-                index = 6;
-                break;
-        }
-        if (index != -1)
-        {
-            return Model.GrayDays[index];
-        }
-        return false;
+        return new UserManager().GetWeekCountFromMonth(Model.DateTime, Model.InitIndex);
     }
 
 }
