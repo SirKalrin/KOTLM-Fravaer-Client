@@ -1,35 +1,33 @@
 ﻿.CalendarDay {
     border: 1px solid #000000;
-    height: 18%;
+    height: 6vw;
     background-color: white;
-
 }
 
-.CalendarDay:hover {
-    background-color: whitesmoke;
-}
+    .CalendarDay:hover {
+        background-color: whitesmoke;
+    }
 
-.CalendarDay h2 {
-    margin-left: -20%;
-    margin-top: 0%;
-    font-size: 1vw;
-
-}
+    .CalendarDay h2 {
+        margin-left: -20%;
+        margin-top: 0%;
+        font-size: 1vw;
+    }
 
 .WeekEnd {
     background-color: #C9C9C9;
     border: 1px solid #000000;
-    height: 18%;
+    height: 6vw;
 }
 
-.WeekEnd h2 {
-    margin-top: 0px;
-    margin-left: -200%;
-    font-size: 0.9vw;
-}
+    .WeekEnd h2 {
+        margin-top: 0px;
+        /*margin-left: -200%;*/
+        font-size: 0.9vw;
+    }
 
 .WeekDay {
-    height: 5%;
+    height: 1.5vw;
     font-family: monospace;
     font-size: 20%;
     border-top: 1px solid black;
@@ -38,66 +36,94 @@
 }
 
 
-.WeekDay p {
-    color: white;
-    font-size: 0.9vw;
-    margin-left: -10%;
-    text-shadow: 0 2px 2px #000;	
-}
+    .WeekDay p {
+        color: white;
+        font-size: 1.2vw;
+        /*margin-left: -10%;*/
+        text-shadow: 0 2px 2px #000;
+    }
 
 .WeekEndDay {
-    height: 5%;
+    height: 1.5vw;
     font-family: monospace;
     font-size: 20%;
     border-top: 1px solid black;
     border-bottom: 1px solid black;
-    background: url(http://jackrugile.com/images/misc/noise-diagonal.png), linear-gradient(#777, #0D47A1);
+    background: linear-gradient(#777, #0D47A1);
 }
 
-.WeekEndDay p {
+    .WeekEndDay p {
+        color: white;
+        font-size: 1.2vw;
+        /*margin-left: -100%;*/
+        text-shadow: 0 2px 2px #000;
+    }
+
+div a {
+    text-decoration: none;
     color: white;
-    font-size: 0.9vw;
-    margin-left: -100%;
-    text-shadow: 0 2px 2px #000;	
+    font-family: monospace;
+    font-weight: bold;
 }
 
-.SideWeekDay {
-    height: 5%;
+.next-previous-btn {
+    height: 80%;
+    border-radius: 10%;
+    border: 0.5px solid black;
+    background: linear-gradient(#777, #0D47A1);
+    text-decoration: none;
+    color: white;
 }
 
-
-
-
-.Container {
-    height: 450px;
-    width: 500px;
+.CalendarContainer {
+    height: 50%;
+    width: 50%;
 }
 
 .GrayDiv {
     background-color: gray;
     border: 1px solid #000000;
-    height: 18%;
+    height: 6vw;
 }
 
-.AbsenceLbl {
+.AddLabel {
     border: 2px solid black;
-    background-color: #5F021F;
-    height: 40px;
-    width: 40px;
-    border-radius: 20px;
+    background-color: #999999;
+    border-radius: 100%;
+    height: 6vh;
+    width: 6vh;
     margin-left: 8%;
     margin-top: -10%;
     /*text*/
     color: white;
     font-weight: bold;
     text-align: center;
-    text-shadow: 0 2px 2px #000;	
-    
-    
+    text-shadow: 0 2px 2px #000;
+}
+
+    .AddLabel:hover {
+        background-color: #09CB20;
+        border: 1px solid black;
+    }
+
+.AbsenceLbl {
+    border: 2px solid black;
+    background-color: #5F021F;
+    border-radius: 100%;
+    height: 6vh;
+    width: 6vh;
+    margin-left: 8%;
+    margin-top: -10%;
+    /*text*/
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    text-shadow: 0 2px 2px #000;
 }
 
 
-
+input p {
+}
 
 dt {
     font-size: 100%;
@@ -107,38 +133,31 @@ dt {
     height: 10%;
 }
 
-.btn-circle {
-  width: 2vw;
-  height: 2vw;
-  text-align: center;
-  padding: 6px 0;
-  font-size: 1vw;
-  line-height: 1.428571429;
-  border-radius: 30px;
-  background-color: lightgray;
-  border: 1px solid black;
-}
-
-.btn-circle:hover {
-    background-color: #09CB20;
-    border: 1px solid black;
-}
-
 .MainContainer {
-    height: 760px;
-    width: 60%;
-    background-color: #EBE486;
-    margin-left: 20%;
+    height: 100vh;
+    width: 90%;
+    background-color: whitesmoke;
+    background-color: rgba(255, 255, 255, 0.4);
+    margin-left: 5%;
+    margin-right: 5%;
     border: 1px solid gray;
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 10%;
+    border-bottom-right-radius: 10%;
+    display: block;
 }
+
+.fill {
+    min-height: 100%;
+    height: 100%;
+}
+
 
 h2 {
     font-family: Impact, Charcoal, sans-serif;
     font-size: 3vw;
     margin-left: -1%;
 }
+
 h1 {
     font-family: Impact, Charcoal, sans-serif;
     font-size: 1.7vw;

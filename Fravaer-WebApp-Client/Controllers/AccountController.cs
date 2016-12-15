@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Security;
+using Fravaer_WebApp_Client.DataAnnotations;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
@@ -20,7 +21,7 @@ using ServiceGateways.Interfaces;
 
 namespace Fravaer_WebApp_Client.Controllers
 {
-    [Authorize]
+    [LoginRequired]
     public class AccountController : Controller
     {
 

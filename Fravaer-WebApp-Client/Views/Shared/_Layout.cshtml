@@ -6,34 +6,29 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    <head>
     <link href="~/Styles/IndexSyleSheet.css" rel="stylesheet" type="text/css" />
-
 </head>
 
-</head>
-
-<body>
-    <header class="header">
+<body style="height:100%">
+    <header class="header col-md-12">
         <div class="col-md-12" id="logo">
             <a href="/"><img src="http://eeu.dk/templates/webitallskeleton/images/dev/logo-dk.png"></a>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Min Side", "Details", "Users", new {id = 2}, null)</li>
+                    <li>@Html.ActionLink("Min Side", "Details", "Users", new { id = 2 }, null)</li>
                     <li>@Html.ActionLink("Oversigt", "Index", "Users")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>
     </header>
-<div style="width: 100%">
-    @RenderBody()
-    <hr/>
-    <footer>
+    <div class="col-md-12 fill" style="height: 100%;">
+        @RenderBody()
+    </div>
+    <hr class="col-md-12"/>
+    <footer class="col-md-12">
         <p>&copy; @DateTime.Now.Year - KOTLM Design</p>
     </footer>
-</div>
-    
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")

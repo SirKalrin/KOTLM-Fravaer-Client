@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Fravaer_WebApp_Client.DataAnnotations;
 using Fravaer_WebApp_Client.Models;
 using ServiceGateways.Entities;
 using ServiceGateways.Facade;
@@ -13,6 +14,7 @@ using ServiceGateways.Interfaces;
 
 namespace Fravaer_WebApp_Client.Controllers
 {
+    [LoginRequired]
     public class AbsencesController : Controller
     {
         private IServiceGateway<Absence, int> _absenceServiceGateway = new ServiceGatewayFacade().GetAbsenceServiceGateway();

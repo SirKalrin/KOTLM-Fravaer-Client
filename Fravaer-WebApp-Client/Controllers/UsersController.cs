@@ -10,8 +10,10 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.UI.WebControls;
 using BusinessLogic.Managers;
 using DateTimeExtensions;
+using Fravaer_WebApp_Client.DataAnnotations;
 using Fravaer_WebApp_Client.Models;
 using Microsoft.AspNet.Identity.Owin;
 using ServiceGateways.Entities;
@@ -21,7 +23,7 @@ using ServiceGateways.ServiceGateways;
 
 namespace Fravaer_WebApp_Client.Controllers
 {
-    //[Authorize(Roles = "Administrator")]
+    [LoginRequired]
     public class UsersController : Controller
     {
         private IServiceGateway<User, int> _userServiceGateway = new ServiceGatewayFacade().GetUserServiceGateway();
@@ -32,7 +34,7 @@ namespace Fravaer_WebApp_Client.Controllers
         private UserManager _userManager = new UserManager();
 
         private IAuthorizationServiceGateway _authorizationServiceGateway = new ServiceGatewayFacade().GetAuthorisationServiceGateway();
-        
+
         // GET: User
         public ActionResult Index()
         {
@@ -63,7 +65,7 @@ namespace Fravaer_WebApp_Client.Controllers
             {
                 return HttpNotFound();
             }
-            
+
             //Setting the dateTime
             DateTime monthShow = DateTime.Now;
             if (monthDate != null)
@@ -75,7 +77,7 @@ namespace Fravaer_WebApp_Client.Controllers
             //Getting the different types of absences + description
             var absenceTypes = _userManager.GetAbsenceTypes();
 
-            
+
 
             //Creating the ViewModel
             var viewModel = new UserDetailsViewModel()
@@ -92,7 +94,7 @@ namespace Fravaer_WebApp_Client.Controllers
 
         /* This POST method deleted an absence if an absence Id is given with the absence type of delete, 
          or creates an absence if the above criterias isnt met an absence DateTime and absence type is given, 
-         where it redirect to DetailsView afterwards*/ 
+         where it redirect to DetailsView afterwards*/
         [HttpPost]
         public ActionResult Details(int? id, DateTime? monthDate, string absenceType, DateTime? absenceDate, int? deletableAbsenceId)
         {
@@ -103,16 +105,16 @@ namespace Fravaer_WebApp_Client.Controllers
             {
                 _userManager.DeleteAbsenceFromUser(deletableAbsenceId.Value);
             }
-            else if(absenceType.Equals("Slet"))
+            else if (absenceType.Equals("Slet"))
             {
                 //Do nothing
             }
-            else if(absenceDate != null && absenceType != null)
+            else if (absenceDate != null && absenceType != null)
             {
                 _userManager.AddAbsenceToUser(user, absenceDate, absenceType);
             }
 
-            return RedirectToAction("Details", new RouteValueDictionary(new {id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType}));
+            return RedirectToAction("Details", new RouteValueDictionary(new { id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType }));
         }
 
         // GET: Medarbejder/Create
@@ -160,7 +162,7 @@ namespace Fravaer_WebApp_Client.Controllers
             {
                 return HttpNotFound();
             }
-            return View(new CreateUserViewModel() {User = user, Departments = _departmentServiceGateway.ReadAll()});
+            return View(new CreateUserViewModel() { User = user, Departments = _departmentServiceGateway.ReadAll() });
         }
 
         // POST: User/Edit/5
@@ -176,7 +178,7 @@ namespace Fravaer_WebApp_Client.Controllers
                 _userServiceGateway.Update(user);
                 return RedirectToAction("Index");
             }
-            return View(new CreateUserViewModel() {User = user, Departments = _departmentServiceGateway.ReadAll()});
+            return View(new CreateUserViewModel() { User = user, Departments = _departmentServiceGateway.ReadAll() });
         }
 
         // GET: User/Delete/5
@@ -219,8 +221,8 @@ namespace Fravaer_WebApp_Client.Controllers
                 }
                 i = i.AddDays(1);
             }
-            return RedirectToAction("Details", new RouteValueDictionary(new { id = id.Value, monthDate = dateFrom}));
+            return RedirectToAction("Details", new RouteValueDictionary(new { id = id.Value, monthDate = dateFrom }));
         }
-        
+
     }
 }
