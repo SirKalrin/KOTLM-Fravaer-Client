@@ -12,8 +12,9 @@
 
 
 <body>
+
 <div class="CheckboxRow col-md-2">
-    <h3>Medarbejdere:</h3>
+    <h3>Afdelinger:</h3>
     @foreach (var item in Model.Departments)
     {
         <div>
@@ -30,37 +31,57 @@
         </div>
     }
 </div>
-    <div class="col-md-8">
-        <div class="col-md-3">
-            <table class="UserNameTable">
-                <tr><th>Navne</th></tr>
-                @foreach (var dep in Model.Departments)
+    <div class="col-md-10" style="text-align: center">
+        <div class="col-md-4" align="right">
+            <a class="btn btn-success" href='@Url.Action("Index", "Users", new RouteValueDictionary(new {monthTime = Model.MonthDateTime.AddMonths(-1)}))'>Forrige</a>
+        </div>
+        <div class="col-md-2">
+            <h3>@Model.MonthDateTime.ToString("yyyy MMMM")</h3>
+        </div>
+        <div class="col-md-4" align="left">
+            <a class="btn btn-success" href='@Url.Action("Index", "Users", new RouteValueDictionary(new {monthTime = Model.MonthDateTime.AddMonths(1)}))'>Næste</a>
+        </div>
+    </div>
+<div class="col-md-8" >
+    
+    <div class="col-md-3">
+        <table class="UserNameTable">
+            <tr><th>Afdelinger</th></tr>
+            @foreach (var dep in Model.Departments)
             {
-                foreach (var use in dep.Users)
+                if (dep.Users.Any())
                 {
+                    <tr><th>@dep.Name</th></tr>
+                    foreach (var use in dep.Users)
+                    {
                         <tr>
                             <td class="UserNameTableBox">
                                 <p>
-                                    @Html.ActionLink(@use.FirstName + " " + use.LastName, "Details", new { id = use.Id }, new
-                           {
-                               style = "color: black"
-                           })
+                                    @Html.ActionLink(@use.FirstName + " " + use.LastName, "Details", new {id = use.Id}, new
+                                    {
+                                        style = "color: black"
+                                    })
                                 </p>
                             </td>
                         </tr>
                     }
                 }
-            </table>
-        </div>
-        <div class="Calendar col-md-9">
-            <table>
-                @for (int i = 0; i < @Model.MonthDateTime.LastDayOfTheMonth().Day; i++)
+            }
+        </table>
+    </div>
+    <div class="Calendar col-md-9">
+        <table>
+
+            @for (int i = 0; i < @Model.MonthDateTime.LastDayOfTheMonth().Day; i++)
+            {
+                <th>@(i + 1)</th>
+            }
+            <tbody>
+            @foreach (var department in Model.Departments)
+            {
+                if (department.Users.Any())
                 {
-                    <th>@(i + 1)</th>
-                }
-                <tbody>
-                @foreach (var department in Model.Departments)
-                {
+                    <th>P</th>
                     foreach (var user in department.Users)
                     {
                         <tr>
@@ -78,52 +99,30 @@
                                 }
                             }
                         </tr>
+
                     }
                 }
-                </tbody>
-            </table>
-        </div>
-        <div class="col-md-12">
-            <hr />
-        </div>
+            }
+            </tbody>
+        </table>
     </div>
-
-<div class="Override col-md-2">
-    <table class="OverrideTable">
-        <h3>Overstyring</h3>
-        <tr>
-            <input class="Checkbox" type="checkbox" />Tillad Overstyring
-        </tr>
-    </table>
-
-    <h3>Fraværskoder:</h3>
-    <input type="radio" name="absenceType"> S - Syg<br />
-    <input type="radio" name="absenceType"> HS - ½ygedag<br />
-    <input type="radio" name="absenceType"> F - Ferie<br />
-    <input type="radio" name="absenceType"> HF - ½feriedag<br />
-    <input type="radio" name="absenceType"> FF - Feriefridag<br />
-    <input type="radio" name="absenceType"> HFF - ½Feriefridag<br />
-    <input type="radio" name="absenceType"> K - Kursus<br />
-    <input type="radio" name="absenceType"> B - Barsel<br />
-    <input type="radio" name="absenceType"> BS - Barn 1. sygedag<br />
-    <input type="radio" name="absenceType"> AF - Andet fravær<br />
-    <input type="radio" name="absenceType"> A - Afspadsering<br />
-    <input type="radio" name="absenceType"> HA - ½afspadsering<br />
-    <input type="radio" name="absenceType"> SN - Seniordag<br />
-
+    <div class="col-md-12">
+        <hr/>
+    </div>
 </div>
+
 <div class="btn btn-success">
     @Html.ActionLink("Afdelinger", "Index", "Departments", null, new
     {
         style = "text-decoration:none; color:white;"
     })
 </div>
-    <div class="btn btn-success">
-        @Html.ActionLink("Ny Bruger", "Create", "Users", null, new
-{
-    style = "text-decoration:none; color:white;"
-})
-    </div>
+<div class="btn btn-success">
+    @Html.ActionLink("Ny Bruger", "Create", "Users", null, new
+    {
+        style = "text-decoration:none; color:white;"
+    })
+</div>
 </body>
 
 @functions
