@@ -6,12 +6,14 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
 using BusinessLogic.Managers;
 using DateTimeExtensions;
 using Fravaer_WebApp_Client.Models;
+using Microsoft.AspNet.Identity.Owin;
 using ServiceGateways.Entities;
 using ServiceGateways.Facade;
 using ServiceGateways.Interfaces;
@@ -29,6 +31,8 @@ namespace Fravaer_WebApp_Client.Controllers
         private IServiceGateway<Absence, int> _absenceServiceGateway = new ServiceGatewayFacade().GetAbsenceServiceGateway();
         private UserManager _userManager = new UserManager();
 
+        private IAuthorizationServiceGateway _authorizationServiceGateway = new ServiceGatewayFacade().GetAuthorisationServiceGateway();
+        
         // GET: User
         public ActionResult Index()
         {
@@ -131,8 +135,9 @@ namespace Fravaer_WebApp_Client.Controllers
         {
             if (ModelState.IsValid)
             {
-                _userServiceGateway.Create(user);
-                return RedirectToAction("Index");
+                user = _userServiceGateway.Create(user);
+                _authorizationServiceGateway.Register(user);
+                return RedirectToAction("Index", "Users");
             }
 
             return View(new CreateUserViewModel()
@@ -188,6 +193,7 @@ namespace Fravaer_WebApp_Client.Controllers
             }
             return View(user);
         }
+
 
         // POST: User/Delete/5
         [HttpPost, ActionName("Delete")]

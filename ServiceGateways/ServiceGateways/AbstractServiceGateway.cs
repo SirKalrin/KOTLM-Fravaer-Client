@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Configuration;
+using ServiceGateways.Entities;
+using ServiceGateways.Interfaces;
 
 namespace ServiceGateways.ServiceGateways
 {
@@ -23,9 +26,8 @@ namespace ServiceGateways.ServiceGateways
             {
                 string token = HttpContext.Current.Session["token"].ToString();
                 Client.DefaultRequestHeaders.Remove("Authorization");
-                Client.DefaultRequestHeaders.Add("Authorization", "Bearer" + token);
+                Client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
             }
         }
-
     }
 }

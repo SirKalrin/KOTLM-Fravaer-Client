@@ -5,19 +5,28 @@ using System.Net.Http.Headers;
 using System.Web;
 using System.Web.Configuration;
 using Newtonsoft.Json.Linq;
+using ServiceGateways.Entities;
+using ServiceGateways.Interfaces;
 
 namespace ServiceGateways.ServiceGateways
 {
-    class AuthorizationServiceGateway
+    class AuthorizationServiceGateway : AbstractServiceGateway, IAuthorizationServiceGateway
     {
-        private HttpClient _client = new HttpClient();
 
-        public AuthorizationServiceGateway()
+        public AuthorizationServiceGateway() : base()
         {
-            string baseAddress = WebConfigurationManager.AppSettings["RestAPIBaseAddress"];
-            _client.BaseAddress = new Uri(baseAddress);
-            _client.DefaultRequestHeaders.Accept.Clear();
-            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+          
+        }
+
+        public HttpResponseMessage Register(User user)
+        {
+            AddAuthorizationHeader();
+            HttpResponseMessage response = Client.PostAsJsonAsync("api/Account/Register", user).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                return response;
+            }
+            return null;
         }
 
         public HttpResponseMessage Login(string userName, string password)
@@ -31,7 +40,7 @@ namespace ServiceGateways.ServiceGateways
             });
 
             //Request token
-            HttpResponseMessage response = _client.PostAsync("/token", formContent).Result;
+            HttpResponseMessage response = Client.PostAsync("/token", formContent).Result;
 
             if (response.IsSuccessStatusCode)
             {
@@ -40,7 +49,6 @@ namespace ServiceGateways.ServiceGateways
                 string token = jObject.GetValue("access_token").ToString();
                 HttpContext.Current.Session["token"] = token;
             }
-
             return response;
         }
     }

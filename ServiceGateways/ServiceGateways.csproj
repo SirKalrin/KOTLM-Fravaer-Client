@@ -55,6 +55,7 @@
     <Compile Include="Entities\Department.cs" />
     <Compile Include="Entities\User.cs" />
     <Compile Include="Facade\ServiceGatewayFacade.cs" />
+    <Compile Include="Interfaces\IAuthorizationServiceGateway.cs" />
     <Compile Include="Interfaces\IServiceGateway.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceGateways\AbsenceServiceGateway.cs" />
