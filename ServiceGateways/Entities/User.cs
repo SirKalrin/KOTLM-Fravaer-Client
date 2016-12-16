@@ -37,6 +37,8 @@ namespace ServiceGateways.Entities
         [Required]
         public Role Role { get; set; }
 
+        public DateTime EditFromDate { get; set; }
+
         public User()
         {
             Absences = new List<Absence>();
