@@ -3,6 +3,7 @@
 @using BusinessLogic.Managers
 @using DateTimeExtensions
 @using Fravaer_WebApp_Client.Models
+@using Microsoft.Ajax.Utilities
 @using ServiceGateways.Entities
 @model Fravaer_WebApp_Client.Models.UserDetailsViewModel
 
@@ -12,7 +13,7 @@
 
 <section><link href="~/Styles/UserDetailsStyleSheet.css" rel="stylesheet" type="text/css" /></section>
 
-
+@{ User currentUser = (User)HttpContext.Current.Session["currentUser"];}
 <div class="MainContainer">
     <div class="col-xs-12">
         <h2 align="center">-Kalender-</h2>
@@ -70,18 +71,21 @@
             </dd>
         </dl>
         <hr />
-        <div class="btn btn-success">
-            @Html.ActionLink("Redigier", "Edit", new { id = Model.User.Id }, new
-       {
-           style = "text-decoration:none; color:white;"
-       })
-        </div>
-        <div class="btn btn-danger">
-            @Html.ActionLink("Slet", "Delete", new { id = Model.User.Id }, new
-       {
-           style = "text-decoration:none; color:white;"
-       })
-        </div>
+        @if (currentUser.Role == Role.Administrator)
+        {
+            <div class="btn btn-success">
+                @Html.ActionLink("Redigier", "Edit", new {id = Model.User.Id}, new
+                {
+                    style = "text-decoration:none; color:white;"
+                })
+            </div>
+            <div class="btn btn-danger">
+                @Html.ActionLink("Slet", "Delete", new {id = Model.User.Id}, new
+                {
+                    style = "text-decoration:none; color:white;"
+                })
+            </div>
+        }
         <div class="btn btn-warning">
             @Html.ActionLink("Tilbage", "Index", null, new
        {
@@ -181,17 +185,20 @@
                                 }
                                 else
                                 {
-                                    <form method="post" action="@Url.Action("Details", "Users", new RouteValueDictionary(
-                                                                    new
-                                                                    {
-                                                                        id = @Model.User.Id,
-                                                                        monthDate = @Model.DateTime.FirstDayOfTheMonth(),
-                                                                        absenceType = @Model.ChosenAbsence,
-                                                                        absenceDate = Model.DateTime.FirstDayOfTheMonth().AddDays(s - 1)
-                                                                    }))">
-                                        @Html.AntiForgeryToken()
-                                        <input class="AddLabel" type="submit" value="+">
-                                    </form>
+                                    if (currentUser.Role == Role.Administrator || currentUser.Id == Model.User.Id)
+                                    {
+                                        <form method="post" action="@Url.Action("Details", "Users", new RouteValueDictionary(
+                                                                        new
+                                                                        {
+                                                                            id = @Model.User.Id,
+                                                                            monthDate = @Model.DateTime.FirstDayOfTheMonth(),
+                                                                            absenceType = @Model.ChosenAbsence,
+                                                                            absenceDate = Model.DateTime.FirstDayOfTheMonth().AddDays(s - 1)
+                                                                        }))">
+                                            @Html.AntiForgeryToken()
+                                            <input class="AddLabel" type="submit" value="+">
+                                        </form>
+                                    }
                                 }
 
                             }
@@ -218,66 +225,74 @@
         }
     </div>
 
-    <div class="AbsenceCodeDiv col-xs-3">
+<div class="AbsenceCodeDiv col-xs-3">
+    @if (currentUser.Role == Role.Administrator || currentUser.Id == Model.User.Id)
+    {
         <h1>Fraværskoder:</h1>
-        <hr />
-        @foreach (var absence in Model.AbsenceTypes)
+        <hr/>
+        foreach (var absence in Model.AbsenceTypes)
+        {
+            if (Model.ChosenAbsence != null && absence.Equals(Model.ChosenAbsence))
             {
-                if (Model.ChosenAbsence != null && absence.Equals(Model.ChosenAbsence))
-                {
                 <input type="radio" name="absenceType" checked="checked">
                 @absence
-                <br />
+                <br/>
             }
             else
             {
-                <input type="radio" name="absenceType" onclick="location.href =
-                    '@Url.Action("Details", "Users", new RouteValueDictionary(new {id = @Model.User.Id,
-                    monthDate = Model.DateTime.FirstDayOfTheMonth(), chosenAbsence = absence}))'" />
-                    @absence
-                    <br />
+                <input type="radio" name="absenceType" onclick="location.href = '@Url.Action("Details", "Users", new RouteValueDictionary(new
+                                                                                 {
+                                                                                     id = @Model.User.Id,
+                                                                                     monthDate = Model.DateTime.FirstDayOfTheMonth(), chosenAbsence = absence
+                                                                                 }))'"/>
+                @absence
+                <br/>
             }
         }
-        <hr />
+        <hr/>
+    }
+    @if (currentUser.Role == Role.Administrator)
+    {
         <h1>Arbejdsfridage:</h1>
         <form method="post" action="@Url.Action("AddGrayDaysToUser", "Users")">
 
-            <input type="hidden" name="id" value="@Model.User.Id" />
+            <input type="hidden" name="id" value="@Model.User.Id"/>
 
             <div class="workFreeDaysDiv col-xs-1">
-                <input type="checkbox" name="chosenDays" value="Monday" />M
+                <input type="checkbox" name="chosenDays" value="Monday"/>M
             </div>
             <div class="workFreeDaysDiv col-xs-1">
-                <input type="checkbox" name="chosenDays" value="Tuesday" />T
+                <input type="checkbox" name="chosenDays" value="Tuesday"/>T
             </div>
             <div class="workFreeDaysDiv col-xs-1">
-                <input type="checkbox" name="chosenDays" value="Wednesday" />O
+                <input type="checkbox" name="chosenDays" value="Wednesday"/>O
             </div>
             <div class="workFreeDaysDiv col-xs-1">
-                <input type="checkbox" name="chosenDays" value="Thursday" />T
+                <input type="checkbox" name="chosenDays" value="Thursday"/>T
             </div>
             <div class="workFreeDaysDiv col-xs-1">
-                <input type="checkbox" name="chosenDays" value="Friday" />F
+                <input type="checkbox" name="chosenDays" value="Friday"/>F
             </div>
             <div class="workFreeDaysDiv col-xs-1">
-                <input type="checkbox" name="chosenDays" value="Saturday" />L
+                <input type="checkbox" name="chosenDays" value="Saturday"/>L
             </div>
             <div class="workFreeDaysDiv col-xs-1">
-                <input type="checkbox" name="chosenDays" value="Sunday" />S
+                <input type="checkbox" name="chosenDays" value="Sunday"/>S
             </div>
-            <p style="font-weight: bold">   Start dato:</p>
+            <p style="font-weight: bold"> Start dato:</p>
             <div class="intervalStart col-xs-12">
-                <input type="date" name="dateFrom" />
+                <input type="date" name="dateFrom"/>
             </div>
-            <p style="font-weight: bold">   Slut dato:</p>
+            <p style="font-weight: bold"> Slut dato:</p>
             <div class="intervalStart col-xs-12">
-                <input type="date" name="dateEnd" />
+                <input type="date" name="dateEnd"/>
             </div>
             <div class="saveButton col-xs-6">
                 <input class="btn btn-default" type="submit" value="Gem">
             </div>
         </form>
-    </div>
+    }
+</div>
 </div>
 
 @functions
