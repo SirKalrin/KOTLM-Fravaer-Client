@@ -1,4 +1,5 @@
 ﻿@using DateTimeExtensions
+@using BusinessLogic.Managers
 @using ServiceGateways.Entities
 @model Fravaer_WebApp_Client.Models.UserIndexViewModel
 
@@ -12,134 +13,210 @@
 
 
 <body>
-<div class="CheckboxRow col-md-2">
-    <h3>Medarbejdere:</h3>
 
-        @foreach (var item in Model.Departments)
-         {
-             <div>
-                 @if (item.Id == 1 && item.Users.Any())
-                 {
-                     <input class="Checkbox" type="checkbox" checked="checked"/>
-                     @Html.DisplayFor(modelItem => item.Name)
-                 }
-                 @if (item.Id != 1)
-                 {
-                     <input class="Checkbox" type="checkbox" checked="checked"/>
-                     @Html.DisplayFor(modelItem => item.Name)
-                 }
-             </div>
-         }
-</div>
-    <div class="col-md-8">
-        <div class="col-md-3">
-            <table class="UserNameTable">
-                <tr><th>Navne</th></tr>
-                @foreach (var dep in Model.Departments)
-            {
-                foreach (var use in dep.Users)
+    <div class="Container col-xs-12">
+
+        @*<div class="CheckboxRow col-md-2">
+                <h3>Afdelinger:</h3>
+                @foreach (var item in Model.Departments)
                 {
-                        <tr>
-                            <td class="UserNameTableBox">
-                                <p>
-                                    @Html.ActionLink(@use.FirstName + " " + use.LastName, "Details", new { id = use.Id }, new
-                           {
-                               style = "color: black"
-                           })
-                                </p>
-                            </td>
-                        </tr>
-                    }
-                }
-            </table>
-        </div>
-        <div class="Calendar col-md-9">
-            <table>
-                @for (int i = 0; i < @Model.MonthDateTime.LastDayOfTheMonth().Day; i++)
-                {
-                    <th>@(i + 1)</th>
-                }
-                <tbody>
-                @foreach (var department in Model.Departments)
-                {
-                    foreach (var user in department.Users)
+                    <div>
+                        @if (item.Id == 1 && item.Users.Any())
                     {
-                        <tr>
-                            @for (int k = 1; k < @Model.MonthDateTime.LastDayOfTheMonth().Day + 1; k++)
+                            <input class="Checkbox" type="checkbox" checked="checked" />
+                            @Html.DisplayFor(modelItem => item.Name)
+                        }
+                        @if (item.Id != 1)
+                    {
+                            <input class="Checkbox" type="checkbox" checked="checked" />
+                            @Html.DisplayFor(modelItem => item.Name)
+                        }
+                    </div>
+                }
+            </div>*@
+        <div class="col-xs-2"></div>
+        <div class="CalenderContainer col-md-8" style="text-align: center">
+            <div class="col-xs-12">
+                <h2 align="center">-Kalender-</h2>
+            </div>
+            <div class="col-xs-12" style="height: 55px;">
+                <div class="col-md-4" align="right">
+                    <a class="btn btn-success" href='@Url.Action("Index", "Users", new RouteValueDictionary(new {monthTime = Model.MonthDateTime.AddMonths(-1)}))'>Forrige</a>
+                </div>
+                <div class="col-md-4">
+                    <h3>@Model.MonthDateTime.ToString("yyyy MMMM")</h3>
+                </div>
+                <div class="col-md-4" align="left">
+                    <a class="btn btn-success" href='@Url.Action("Index", "Users", new RouteValueDictionary(new {monthTime = Model.MonthDateTime.AddMonths(1)}))'>Næste</a>
+                </div>
+            </div>
+
+            <div class="col-xs-12" style="height: 500px">
+                <div class="col-md-2">
+                    <table class="UserNameTable">
+                        <tr><th class="DeppartHeader">Afdelinger</th></tr>
+                        @foreach (var dep in Model.Departments)
+                        {
+                            if (dep.Users.Any())
                             {
-                                if (@GetAbsenceForDate(k, user) != null)
+                                <tr><th class="DeppartHeader">@dep.Name</th></tr>
+                                foreach (var user in dep.Users)
                                 {
-                                    <td class="AbsenceTableBox">
-                                        <p>@GetAbsenceForDate(k, user).Status</p>
-                                    </td>
-                                }
-                                else
-                                {
-                                    <td class="EmptyAbsenceTableBox"></td>
+                                    if (IsPowerOfTwo(dep.Users.IndexOf(user) + 1))
+                                    {
+                                        <tr>
+                                            <td class="UserNameTableBox" style="background-color: lightslategray">
+                                                <p>
+                                                    @Html.ActionLink(@user.FirstName + " " + user.LastName, "Details", new { id = user.Id }, new
+                                           {
+                                               style = "color: black"
+                                           })
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td class="UserNameTableBox" style="background-color: lightgray">
+                                                <p>
+                                                    @Html.ActionLink(@user.FirstName + " " + user.LastName, "Details", new { id = user.Id }, new
+                                               {
+                                                   style = "color: black"
+                                               })
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    }
                                 }
                             }
-                        </tr>
-                    }
+                        }
+                    </table>
+                </div>
+                <div class="Calendar col-md-10">
+                    <table>
+
+                        @for (int i = 0; i < @Model.MonthDateTime.LastDayOfTheMonth().Day; i++)
+                        {
+                            <th>@(i + 1)</th>
+                        }
+                        <tbody>
+                            @foreach (var department in Model.Departments)
+                            {
+                                if (department.Users.Any())
+                                {
+                                    for (int j = 1; j <= @Model.MonthDateTime.LastDayOfTheMonth().Day; j++)
+                                    {
+                                    <td class="Kappa"></td>
+                                    }
+
+                                    foreach (var user in department.Users)
+                                    {
+                                        if (IsPowerOfTwo(department.Users.IndexOf(user) + 1))
+                                        {
+                                            <tr>
+                                                @for (int k = 1; k <= @Model.MonthDateTime.LastDayOfTheMonth().Day; k++)
+                                                {
+                                                    if (GetDateTimeByDay(k).DayOfWeek.ToString().Equals("Saturday") || GetDateTimeByDay(k).DayOfWeek.ToString().Equals("Sunday"))
+                                                    {
+                                                        <td class="WeekEnd"></td>
+                                                    }
+                                                    else if (GetAbsenceForDate(k, user) != null && GetAbsenceForDate(k, user).Status.Equals(Statuses.GRAY))
+                                                    {
+                                                        <td class="WeekEnd"></td>
+                                                    }
+                                                    else if (@GetAbsenceForDate(k, user) != null)
+                                                    {
+
+                                                        <td class="AbsenceTableBox">
+                                                            <p>@GetAbsenceForDate(k, user).Status</p>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="SecondEmptyAbsenceTableBox" style="background-color: lightslategray"></td>
+                                                    }
+                                                }
+                                            </tr>
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                @for (int k = 1; k <= @Model.MonthDateTime.LastDayOfTheMonth().Day; k++)
+                                                {
+                                                    if (GetDateTimeByDay(k).DayOfWeek.ToString().Equals("Saturday") || GetDateTimeByDay(k).DayOfWeek.ToString().Equals("Sunday"))
+                                                    {
+                                                        <td class="WeekEnd"></td>
+                                                    }
+                                                    else if (GetAbsenceForDate(k, user) != null && GetAbsenceForDate(k, user).Status.Equals(Statuses.GRAY))
+                                                    {
+                                                        <td class="WeekEnd"></td>
+                                                    }
+                                                    else if (@GetAbsenceForDate(k, user) != null)
+                                                    {
+
+                                                        <td class="AbsenceTableBox">
+                                                            <p>@GetAbsenceForDate(k, user).Status</p>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td class="EmptyAbsenceTableBox" style="background-color: lightgray"></td>
+                                                    }
+                                                }
+                                            </tr>
+                                        }
+                                    }
+                                }
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-12">
+                        <hr />
+                    </div>
+                </div>
+
+                <div class="btn btn-success">
+                    @Html.ActionLink("Afdelinger", "Index", "Departments", null, new
+               {
+                   style = "text-decoration:none; color:white;"
+               })
+                </div>
+                <div class="btn btn-success">
+                    @Html.ActionLink("Ny Bruger", "Create", "Users", null, new
+               {
+                   style = "text-decoration:none; color:white;"
+               })
+                </div>
+            </div>
+        </div>
+    </body>
+
+    @functions
+    {
+
+        public Absence GetAbsenceForDate(int day, User user)
+        {
+            return new UserManager().GetAbsenceForDate(day, Model.MonthDateTime, user.Absences);
+        }
+
+        public DateTime GetDateTimeByDay(int day)
+        {
+            return new DateTime(Model.MonthDateTime.Year, Model.MonthDateTime.Month, day);
+
+        }
+        bool IsPowerOfTwo(int x)
+        {
+            for (int i = 0; i < 50;)
+            {
+                i = i + 2;
+                if (x == i)
+                {
+                    return true;
                 }
-                </tbody>
-            </table>
-        </div>
-        <div class="col-md-12">
-            <hr />
-        </div>
-    </div>
+            }
+            return false;
+        }
 
-<div class="Override col-md-2">
-    <table class="OverrideTable">
-        <h3>Overstyring</h3>
-        <tr>
-            <input class="Checkbox" type="checkbox" />Tillad Overstyring
-        </tr>
-    </table>
-
-    <h3>Fraværskoder:</h3>
-    <input type="radio" name="absenceType"> S - Syg<br />
-    <input type="radio" name="absenceType"> HS - ½ygedag<br />
-    <input type="radio" name="absenceType"> F - Ferie<br />
-    <input type="radio" name="absenceType"> HF - ½feriedag<br />
-    <input type="radio" name="absenceType"> FF - Feriefridag<br />
-    <input type="radio" name="absenceType"> HFF - ½Feriefridag<br />
-    <input type="radio" name="absenceType"> K - Kursus<br />
-    <input type="radio" name="absenceType"> B - Barsel<br />
-    <input type="radio" name="absenceType"> BS - Barn 1. sygedag<br />
-    <input type="radio" name="absenceType"> AF - Andet fravær<br />
-    <input type="radio" name="absenceType"> A - Afspadsering<br />
-    <input type="radio" name="absenceType"> HA - ½afspadsering<br />
-    <input type="radio" name="absenceType"> SN - Seniordag<br />
-
-</div>
-<div class="btn btn-success">
-    @Html.ActionLink("Afdelinger", "Index", "Departments", null, new
-    {
-        style = "text-decoration:none; color:white;"
-    })
-</div>
-<div class="btn btn-success">
-    @Html.ActionLink("Ny Bruger", "Create", "Users", null, new
-    {
-        style = "text-decoration:none; color:white;"
-    })
-</div>
-    <div class="btn btn-success">
-        @Html.ActionLink("Send email notifikation", "EmailNotification", "Users", null, new
-{
-    style = "text-decoration:none; color:white;"
-})
-    </div>
-
-</body>
-
-@functions
-    {
-
-    public Absence GetAbsenceForDate(int day, User user)
-    {
-        DateTime eventDate = new DateTime(@Model.MonthDateTime.Year, @Model.MonthDateTime.Month, day);
-        return user.Absences.FirstOrDefault(x => x.Date == eventDate);
     }
-}

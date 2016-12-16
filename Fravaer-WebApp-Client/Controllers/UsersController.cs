@@ -5,14 +5,15 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Net.Mail;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using System.Web.UI.WebControls;
 using BusinessLogic.Managers;
 using DateTimeExtensions;
+using Fravaer_WebApp_Client.DataAnnotations;
 using Fravaer_WebApp_Client.Models;
 using Microsoft.AspNet.Identity.Owin;
 using ServiceGateways.Entities;
@@ -22,7 +23,7 @@ using ServiceGateways.ServiceGateways;
 
 namespace Fravaer_WebApp_Client.Controllers
 {
-    //[Authorize(Roles = "Administrator")]
+    [LoginRequired]
     public class UsersController : Controller
     {
         private IServiceGateway<User, int> _userServiceGateway = new ServiceGatewayFacade().GetUserServiceGateway();
@@ -33,15 +34,21 @@ namespace Fravaer_WebApp_Client.Controllers
         private UserManager _userManager = new UserManager();
 
         private IAuthorizationServiceGateway _authorizationServiceGateway = new ServiceGatewayFacade().GetAuthorisationServiceGateway();
-        
+
+        private string _deleteType = "Slet";
         // GET: User
-        public ActionResult Index()
+        public ActionResult Index(DateTime? monthTime)
         {
             decimal averageDays = Decimal.Divide(100, DateTime.Now.LastDayOfTheMonth().Day);
+            var month = DateTime.Now;
+            if (monthTime != null)
+            {
+                month = monthTime.Value;
+            }
             var ViewModel = new UserIndexViewModel()
             {
                 Departments = _departmentServiceGateway.ReadAll(),
-                MonthDateTime = DateTime.Now,
+                MonthDateTime = month,
                 AverageDaysInt = averageDays
             };
             return View(ViewModel);
@@ -64,7 +71,7 @@ namespace Fravaer_WebApp_Client.Controllers
             {
                 return HttpNotFound();
             }
-            
+
             //Setting the dateTime
             DateTime monthShow = DateTime.Now;
             if (monthDate != null)
@@ -76,7 +83,7 @@ namespace Fravaer_WebApp_Client.Controllers
             //Getting the different types of absences + description
             var absenceTypes = _userManager.GetAbsenceTypes();
 
-            
+
 
             //Creating the ViewModel
             var viewModel = new UserDetailsViewModel()
@@ -93,27 +100,27 @@ namespace Fravaer_WebApp_Client.Controllers
 
         /* This POST method deleted an absence if an absence Id is given with the absence type of delete, 
          or creates an absence if the above criterias isnt met an absence DateTime and absence type is given, 
-         where it redirect to DetailsView afterwards*/ 
+         where it redirect to DetailsView afterwards*/
         [HttpPost]
         public ActionResult Details(int? id, DateTime? monthDate, string absenceType, DateTime? absenceDate, int? deletableAbsenceId)
         {
-            User user = _userServiceGateway.Read(id.Value);
+            //User user = _userServiceGateway.Read(id.Value);
 
-            //Either adds or deleted an absence
-            if (absenceType != null && absenceType.Equals("Slet") && deletableAbsenceId != null)
-            {
-                _userManager.DeleteAbsenceFromUser(deletableAbsenceId.Value);
-            }
-            else if(absenceType.Equals("Slet"))
-            {
-                //Do nothing
-            }
-            else if(absenceDate != null && absenceType != null)
-            {
-                _userManager.AddAbsenceToUser(user, absenceDate, absenceType);
-            }
+            ////Either adds or deleted an absence
+            //if (absenceType.Equals("Slet") && deletableAbsenceId != null)
+            //{
+            //    _userManager.DeleteAbsenceFromUser(deletableAbsenceId.Value);
+            //}
+            //else if(absenceType.Equals("Slet"))
+            //{
+            //    //Do nothing
+            //}
+            //else if(absenceDate != null && absenceType != null)
+            //{
+            //    _userManager.AddAbsenceToUser(user, absenceDate, absenceType);
+            //}
 
-            return RedirectToAction("Details", new RouteValueDictionary(new {id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType}));
+            return RedirectToAction("Details", "Users", new RouteValueDictionary(new {id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType}));
         }
 
         // GET: Medarbejder/Create
@@ -161,7 +168,7 @@ namespace Fravaer_WebApp_Client.Controllers
             {
                 return HttpNotFound();
             }
-            return View(new CreateUserViewModel() {User = user, Departments = _departmentServiceGateway.ReadAll()});
+            return View(new CreateUserViewModel() { User = user, Departments = _departmentServiceGateway.ReadAll() });
         }
 
         // POST: User/Edit/5
@@ -177,7 +184,7 @@ namespace Fravaer_WebApp_Client.Controllers
                 _userServiceGateway.Update(user);
                 return RedirectToAction("Index");
             }
-            return View(new CreateUserViewModel() {User = user, Departments = _departmentServiceGateway.ReadAll()});
+            return View(new CreateUserViewModel() { User = user, Departments = _departmentServiceGateway.ReadAll() });
         }
 
         // GET: User/Delete/5
@@ -208,49 +215,51 @@ namespace Fravaer_WebApp_Client.Controllers
         [HttpPost]
         public ActionResult AddGrayDaysToUser(int? id, DateTime dateFrom, DateTime dateEnd, List<string> chosenDays)
         {
-            var user = _userServiceGateway.Read(id.Value);
             for (DateTime i = dateFrom; i <= dateEnd;)
             {
                 foreach (var dayType in chosenDays)
                 {
                     if (i.DayOfWeek.ToString().Equals(dayType))
                     {
-                        _userManager.AddAbsenceToUser(user, i, Statuses.GRAY.ToString());
+                        _userManager.AddAbsenceToUser(id.Value, i, Statuses.GRAY.ToString());
                     }
                 }
                 i = i.AddDays(1);
             }
-            return RedirectToAction("Details", new RouteValueDictionary(new { id = id.Value, monthDate = dateFrom}));
+            return RedirectToAction("Details", new RouteValueDictionary(new { id = id.Value, monthDate = dateFrom }));
         }
-        public async Task<ActionResult> EmailNotification()
+
+        // POST: Absences/Delete/5
+        //Deletes the absence with the given deletableAbsenceId and redirects to the details view.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteAbsence(int? id, DateTime? monthDate, string absenceType, int? deletableAbsenceId)
         {
-            var succesfullySent = new List<User>();
-            foreach (var user in _userServiceGateway.ReadAll())
+            if (absenceType.Equals(_deleteType) && deletableAbsenceId != null)
             {
-                if (user.EditFromDate <= DateTime.Now)
-                {
-                    var body = "<p>Hej {0} {1}</p><p></p><p>{2}</p>";
-                    var message = new MailMessage();
-                    //message.To.Add(new MailAddress("dr.iversen@hotmail.com"));
-                    message.To.Add(new MailAddress(user.Email));
-                    message.Subject = "Registrering af fravær";
-                    message.Body = string.Format(body, user.FirstName, user.LastName,
-                        "Du har glemt at godkende dit fravær for måneden. Godkend venligst dit fravær via ´Min Side´ på hjemmesiden.");
-                    message.IsBodyHtml = true;
-                    using (var smtp = new SmtpClient())
-                    {
-                        await smtp.SendMailAsync(message);
-                        succesfullySent.Add(user);
-                    }
-                }
+                _absenceServiceGateway.Delete(deletableAbsenceId.Value);
             }
-            var printString = "";
-            foreach (var user in succesfullySent)
-            {
-                printString = printString + user.FirstName + " " + user.LastName + "\n";
-            }           
-            System.Windows.Forms.MessageBox.Show( $"Email notifikationer blev sendt til:\n{printString}");
-            return RedirectToAction("Index");
+
+            return RedirectToAction("Details", "Users", new RouteValueDictionary(new { id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType }));
         }
+
+        // POST: Absences/Create
+        // Calls the userManager to create an absence with the given variables and redirects to the detailsView.
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateAbsence(int? id, DateTime? monthDate, string absenceType, DateTime? absenceDate)
+        {
+
+            if (absenceDate != null && absenceType != null && absenceType != _deleteType)
+            {
+                _userManager.AddAbsenceToUser(id.Value, absenceDate, absenceType);
+            }
+
+            return RedirectToAction("Details", "Users", new RouteValueDictionary(new { id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType }));
+
+        }
+
     }
 }

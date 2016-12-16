@@ -6,13 +6,13 @@
 }
 .CheckboxRow {
     border: 2px solid #000000;
-  
-
+ 
+ 
 }
 .Override {
     border: 2px solid #000000;
 }
-
+ 
 .header {
    background: url(http://www.eeu.dk/templates/webitallskeleton/images/dev/headerbg.png);
    border-radius: 8px 8px 0 0;
@@ -21,50 +21,81 @@
     /*width: 26px;*/
     height: 26px;
     /*border: 1px solid black;*/
-
+ 
 }
-
+ 
 th, td {
     border: 1px solid;
     margin: 2px;
-    width: 3.3%;
+    /*width: 3.62%;*/
     height: 20px;
     text-align: center;
     background-color: whitesmoke;
 }
-
+ 
 th {
     background: url(http://jackrugile.com/images/misc/noise-diagonal.png), linear-gradient(#777, #0D47A1);
-
+ 
 }
-
+ 
 .AbsenceTableBox {
     background-color: #800000;
-    
+    width: 3vw;
 }
-
+ 
+.DeppartHeader{
+    width: 13vw;
+}
 .AbsenceTableBox p {
     color: white;
     height: 7px;
 }
-
+ 
 .EmptyAbsenceTableBox:hover {
     background-color: lightgray;
 }
-
+ 
 .UserNameTableBox p {
     height: 7px;
     font-weight: bold;
 }
-
+ 
 .UserNameTable td {
     text-align: left;
 }
-
+ 
 .UserNameTable th {
     height: 21.5px;
 }
-
-
-
-
+ 
+.WeekEnd {
+    background-color: gray;
+    width: 3vw;
+}
+ 
+.Kappa{
+    opacity: 0.4;
+    border: 0px;
+    height: 22.6px;
+    width: 3vw;
+    background-color: black;
+}
+ 
+.CalenderContainer{
+    height: 75vh;
+    width: 90%;
+    background-color: whitesmoke;
+    background-color: rgba(255, 255, 255, 0.4);
+    margin-left: 5%;
+    margin-right: 5%;
+    border: 1px solid gray;
+    border-bottom-left-radius: 20%;
+    border-bottom-right-radius: 20%;
+    display: block;
+}
+ 
+h2 {
+    font-family: Impact, Charcoal, sans-serif;
+    font-size: 3vw;
+    margin-left: -1%;
+}

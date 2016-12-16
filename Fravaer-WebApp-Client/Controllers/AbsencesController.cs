@@ -6,6 +6,9 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using Fravaer_WebApp_Client.DataAnnotations;
+using System.Web.Routing;
+using BusinessLogic.Managers;
 using Fravaer_WebApp_Client.Models;
 using ServiceGateways.Entities;
 using ServiceGateways.Facade;
@@ -13,9 +16,11 @@ using ServiceGateways.Interfaces;
 
 namespace Fravaer_WebApp_Client.Controllers
 {
+    [LoginRequired]
     public class AbsencesController : Controller
     {
         private IServiceGateway<Absence, int> _absenceServiceGateway = new ServiceGatewayFacade().GetAbsenceServiceGateway();
+        private UserManager _userManager = new UserManager();
 
         // GET: Absences
         public ActionResult Index()
@@ -48,16 +53,16 @@ namespace Fravaer_WebApp_Client.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Date,User")] Absence absence)
+        public ActionResult Create(int? id, DateTime? monthDate, string absenceType, DateTime? absenceDate, int? deletableAbsenceId)
         {
-            if (ModelState.IsValid)
+            
+            if (absenceDate != null && absenceType != null)
             {
-                _absenceServiceGateway.Create(absence);
-                return RedirectToAction("Index");
+                _userManager.AddAbsenceToUser(id.Value, absenceDate, absenceType);
             }
 
-            return View(absence);
+            return RedirectToAction("Details", "Users", new RouteValueDictionary(new {id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType }));
+
         }
 
         // GET: Absences/Edit/5
@@ -108,10 +113,14 @@ namespace Fravaer_WebApp_Client.Controllers
         // POST: Absences/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult Delete(int? id, DateTime? monthDate, string absenceType, DateTime? absenceDate, int? deletableAbsenceId)
         {
-            _absenceServiceGateway.Delete(id);
-            return RedirectToAction("Index");
+            if (absenceType.Equals("Slet") && deletableAbsenceId != null)
+            {
+                _absenceServiceGateway.Delete(deletableAbsenceId.Value);
+            }
+
+            return RedirectToAction("Details", "Users", new RouteValueDictionary(new { id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType }));
         }
     }
 }
