@@ -56,12 +56,20 @@ div a {
     font-weight: bold;
 }
 .next-previous-btn {
-    height: 80%;
-    border-radius: 10%;
+    height: 35%;
+    border-radius: 50%;
     border: 0.5px solid black;
     background: linear-gradient(#777, #0D47A1);
     text-decoration: none;
     color: white;
+    font-size: 1.2vw;
+    text-shadow: 0 2px 2px #000;
+}
+
+.next-previous-btn:hover {
+    background: linear-gradient(#777, white);
+    color: black;
+    text-shadow: 0 2px 2px gray;
 }
 .CalendarContainer {
     height: 50vw;
@@ -89,6 +97,8 @@ div a {
     .AddLabel:hover {
         background-color: #09CB20;
         border: 1px solid black;
+        color: black;
+        text-shadow: 0 2px 2px gray;
     }
 .AbsenceLbl {
     border: 2px solid black;
@@ -139,8 +149,8 @@ h1 {
     font-size: 1.7vw;
 }
 h3 {
-    font-family: Impact, Charcoal, sans-serif;
-    font-size: 0.8vw;
+   
+    font-size: 1.4vw;
     margin-top: 7%;
 }
 
