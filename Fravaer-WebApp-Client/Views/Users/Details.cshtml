@@ -5,14 +5,10 @@
 @using Fravaer_WebApp_Client.Models
 @using ServiceGateways.Entities
 @model Fravaer_WebApp_Client.Models.UserDetailsViewModel
-
 @{
     ViewBag.Title = "Details";
 }
-
 <section><link href="~/Styles/UserDetailsStyleSheet.css" rel="stylesheet" type="text/css" /></section>
-
-
 <div class="MainContainer">
     <div class="col-xs-12">
         <h2 align="center">-Kalender-</h2>
@@ -24,47 +20,36 @@
             <dt>
                 Fornavn
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.User.FirstName)
             </dd>
-
             <dt>
                 Efternavn
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.User.LastName)
             </dd>
-
             <dt>
                 Brugernavn
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.User.UserName)
             </dd>
-
             <dt>
                 Email
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.User.Email)
             </dd>
-
             <dt>
                 Afdeling
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.User.Department.Name)
             </dd>
-
             <dt>
                 Rolle
             </dt>
-
             <dd>
                 @Html.DisplayFor(model => model.User.Role)
             </dd>
@@ -89,9 +74,7 @@
        })
         </div>
     </div>
-
     <div class="CalendarContainer col-xs-6" style="text-align: center">
-
         <div class="MonthsDiv col-xs-12">
             <div class="col-xs-4 next-previous-btn">
                 <a href='@Url.Action("Details", "Users", new RouteValueDictionary(new {id = Model.User.Id, monthDate = Model.DateTime.AddMonths(-1), chosenAbsence = Model.ChosenAbsence}))'>Forrige</a>
@@ -103,7 +86,6 @@
                 <a href='@Url.Action("Details", "Users", new RouteValueDictionary(new {id = Model.User.Id, monthDate = Model.DateTime.AddMonths(1), chosenAbsence = Model.ChosenAbsence}))'>Næste</a>
             </div>
         </div>
-
         <div class="WeekDay col-xs-2">
             <p>Man</p>
         </div>
@@ -125,17 +107,15 @@
         <div class="WeekEndDay col-xs-1">
             <p>Søn</p>
         </div>
-
         @for (int i = 0; i < GetWeekCountFromMonth(); i++)
         {
             if (i == 0)
             {
                 for (int j = 0; j < @Model.InitIndex; j++)
                 {
-
                     if (j == (7 * (i + 1)) - 1 || j == 7 * (i + 1) - 2)
                     {
-                        <div class="WeekEnd col-xs-1"></div>
+                        <div class="GrayDayDiv1 col-xs-1"></div>
                     }
                     else
                     {
@@ -143,12 +123,11 @@
                     }
                 }
             }
-
             for (int s = GetStartIndex(i); s <= (i + 1) * 7 - Model.InitIndex; s++)
             {
                 if (s + Model.InitIndex == (7 * (i + 1)) - 1 || s + Model.InitIndex == 7 * (i + 1))
                 {
-                    <div class="WeekEnd col-xs-1">
+                    <div class="GrayDayDiv1 col-xs-1">
                         <p>@s</p>
                     </div>
                 }
@@ -156,7 +135,7 @@
                 {
                     if (GetAbsenceForDate(s) != null && GetAbsenceForDate(s).Status.Equals(Statuses.GRAY))
                     {
-                        <div class="WeekEnd col-xs-2">
+                        <div class="GrayDayDiv2 col-xs-2">
                             <p>@s</p>
                         </div>
                     }
@@ -168,20 +147,21 @@
                             {
                                 if (GetAbsenceForDate(s) != null)
                                 {
-                                    <form method="post" action="@Url.Action("Details", "Users", new RouteValueDictionary(
-                                                                        new
-                                                                        {
-                                                                            id = @Model.User.Id,
-                                                                            monthDate = @Model.DateTime.FirstDayOfTheMonth(),
-                                                                            absenceType = @Model.ChosenAbsence,
-                                                                            deletableAbsenceId = GetAbsenceForDate(s).Id
-                                                                        }))">
+                                    <form method="post" action="@Url.Action("DeleteAbsence", "Users", new RouteValueDictionary(
+                                                                    new
+                                                                    {
+                                                                        id = @Model.User.Id,
+                                                                        monthDate = @Model.DateTime.FirstDayOfTheMonth(),
+                                                                        absenceType = @Model.ChosenAbsence,
+                                                                        deletableAbsenceId = GetAbsenceForDate(s).Id
+                                                                    }))">
+                                        @Html.AntiForgeryToken()
                                         <input class="AbsenceLbl" type="submit" value="@GetAbsenceForDate(s).Status.ToString()">
                                     </form>
                                 }
                                 else
                                 {
-                                    <form method="post" action="@Url.Action("Details", "Users", new RouteValueDictionary(
+                                    <form method="post" action="@Url.Action("CreateAbsence", "Users", new RouteValueDictionary(
                                                                     new
                                                                     {
                                                                         id = @Model.User.Id,
@@ -193,9 +173,7 @@
                                         <input class="AddLabel" type="submit" value="+">
                                     </form>
                                 }
-
                             }
-
                         </div>
                     }
                 }
@@ -205,7 +183,7 @@
                     {
                         if (m == (7 * (i + 1)) - 1 || m == 7 * (i + 1) - 2)
                         {
-                            <div class="WeekEnd col-xs-1"></div>
+                            <div class="GrayDayDiv1 col-xs-1"></div>
                         }
                         else
                         {
@@ -217,7 +195,6 @@
             }
         }
     </div>
-
     <div class="AbsenceCodeDiv col-xs-3">
         <h1>Fraværskoder:</h1>
         <hr />
@@ -239,63 +216,59 @@
             }
         }
         <hr />
-        <h1>Arbejdsfridage:</h1>
-        <form method="post" action="@Url.Action("AddGrayDaysToUser", "Users")">
-
-            <input type="hidden" name="id" value="@Model.User.Id" />
-
-            <div class="workFreeDaysDiv col-xs-1">
-                <input type="checkbox" name="chosenDays" value="Monday" />M
-            </div>
-            <div class="workFreeDaysDiv col-xs-1">
-                <input type="checkbox" name="chosenDays" value="Tuesday" />T
-            </div>
-            <div class="workFreeDaysDiv col-xs-1">
-                <input type="checkbox" name="chosenDays" value="Wednesday" />O
-            </div>
-            <div class="workFreeDaysDiv col-xs-1">
-                <input type="checkbox" name="chosenDays" value="Thursday" />T
-            </div>
-            <div class="workFreeDaysDiv col-xs-1">
-                <input type="checkbox" name="chosenDays" value="Friday" />F
-            </div>
-            <div class="workFreeDaysDiv col-xs-1">
-                <input type="checkbox" name="chosenDays" value="Saturday" />L
-            </div>
-            <div class="workFreeDaysDiv col-xs-1">
-                <input type="checkbox" name="chosenDays" value="Sunday" />S
-            </div>
-            <p style="font-weight: bold">   Start dato:</p>
-            <div class="intervalStart col-xs-12">
-                <input type="date" name="dateFrom" />
-            </div>
-            <p style="font-weight: bold">   Slut dato:</p>
-            <div class="intervalStart col-xs-12">
-                <input type="date" name="dateEnd" />
-            </div>
-            <div class="saveButton col-xs-6">
-                <input class="btn btn-default" type="submit" value="Gem">
-            </div>
-        </form>
+        @*@if (HttpContext.Current.User.Identity)
+        {*@
+            <h1>Arbejdsfridage:</h1>
+            <form method="post" action="@Url.Action("AddGrayDaysToUser", "Users")">
+                <input type="hidden" name="id" value="@Model.User.Id" />
+                <div class="workFreeDaysDiv col-xs-1">
+                    <input type="checkbox" name="chosenDays" value="Monday" />M
+                </div>
+                <div class="workFreeDaysDiv col-xs-1">
+                    <input type="checkbox" name="chosenDays" value="Tuesday" />T
+                </div>
+                <div class="workFreeDaysDiv col-xs-1">
+                    <input type="checkbox" name="chosenDays" value="Wednesday" />O
+                </div>
+                <div class="workFreeDaysDiv col-xs-1">
+                    <input type="checkbox" name="chosenDays" value="Thursday" />T
+                </div>
+                <div class="workFreeDaysDiv col-xs-1">
+                    <input type="checkbox" name="chosenDays" value="Friday" />F
+                </div>
+                <div class="workFreeDaysDiv col-xs-1">
+                    <input type="checkbox" name="chosenDays" value="Saturday" />L
+                </div>
+                <div class="workFreeDaysDiv col-xs-1">
+                    <input type="checkbox" name="chosenDays" value="Sunday" />S
+                </div>
+                <p style="font-weight: bold"> Start dato:</p>
+                <div class="intervalStart col-xs-12">
+                    <input type="date" name="dateFrom" />
+                </div>
+                <p style="font-weight: bold"> Slut dato:</p>
+                <div class="intervalStart col-xs-12">
+                    <input type="date" name="dateEnd" />
+                </div>
+                <div class="saveButton col-xs-6">
+                    <input class="btn btn-default" type="submit" value="Gem">
+                </div>
+            </form>
+        
     </div>
 </div>
-
 @functions
 {
-
     public Absence GetAbsenceForDate(int day)
     {
         return new UserManager().GetAbsenceForDate(day, Model.DateTime, Model.User.Absences);
     }
-
     public int GetStartIndex(int i)
     {
         return new UserManager().GetStartIndex(i, Model.InitIndex);
     }
-
     public int GetWeekCountFromMonth()
     {
         return new UserManager().GetWeekCountFromMonth(Model.DateTime, Model.InitIndex);
     }
-
 }

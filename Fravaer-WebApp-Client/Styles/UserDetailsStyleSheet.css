@@ -3,29 +3,24 @@
     height: 6vw;
     background-color: white;
 }
-
     .CalendarDay:hover {
         background-color: whitesmoke;
     }
-
     .CalendarDay h2 {
         margin-left: -20%;
         margin-top: 0%;
         font-size: 1vw;
     }
-
 .WeekEnd {
     background-color: #C9C9C9;
     border: 1px solid #000000;
     height: 6vw;
 }
-
     .WeekEnd h2 {
         margin-top: 0px;
         /*margin-left: -200%;*/
         font-size: 0.9vw;
     }
-
 .WeekDay {
     height: 1.5vw;
     font-family: monospace;
@@ -34,15 +29,12 @@
     border-bottom: 1px solid black;
     background: url(http://jackrugile.com/images/misc/noise-diagonal.png), linear-gradient(#777, #0D47A1);
 }
-
-
     .WeekDay p {
         color: white;
         font-size: 1.2vw;
         /*margin-left: -10%;*/
         text-shadow: 0 2px 2px #000;
     }
-
 .WeekEndDay {
     height: 1.5vw;
     font-family: monospace;
@@ -51,21 +43,18 @@
     border-bottom: 1px solid black;
     background: linear-gradient(#777, #0D47A1);
 }
-
     .WeekEndDay p {
         color: white;
         font-size: 1.2vw;
         /*margin-left: -100%;*/
         text-shadow: 0 2px 2px #000;
     }
-
 div a {
     text-decoration: none;
     color: white;
     font-family: monospace;
     font-weight: bold;
 }
-
 .next-previous-btn {
     height: 80%;
     border-radius: 10%;
@@ -74,65 +63,56 @@ div a {
     text-decoration: none;
     color: white;
 }
-
 .CalendarContainer {
-    height: 50%;
-    width: 50%;
+    height: 50vw;
 }
-
 .GrayDiv {
     background-color: gray;
     border: 1px solid #000000;
     height: 6vw;
 }
-
 .AddLabel {
     border: 2px solid black;
     background-color: #999999;
     border-radius: 100%;
-    height: 6vh;
-    width: 6vh;
-    margin-left: 8%;
-    margin-top: -10%;
+    height: 3vw;
+    width: 3vw;
+    /*margin-left: 8%;
+    margin-top: -10%;*/
+    align-content: center;
     /*text*/
     color: white;
     font-weight: bold;
     text-align: center;
     text-shadow: 0 2px 2px #000;
 }
-
     .AddLabel:hover {
         background-color: #09CB20;
         border: 1px solid black;
     }
-
 .AbsenceLbl {
     border: 2px solid black;
     background-color: #5F021F;
     border-radius: 100%;
-    height: 6vh;
-    width: 6vh;
-    margin-left: 8%;
-    margin-top: -10%;
+    height: 3vw;
+    width: 3vw;
+    align-content: center;
+    /*margin-left: 8%;
+    margin-top: -10%;*/
     /*text*/
     color: white;
     font-weight: bold;
     text-align: center;
     text-shadow: 0 2px 2px #000;
 }
-
-
 input p {
 }
-
 dt {
     font-size: 100%;
 }
-
 .MonthsDiv {
     height: 10%;
 }
-
 .MainContainer {
     height: 100vh;
     width: 90%;
@@ -145,25 +125,33 @@ dt {
     border-bottom-right-radius: 10%;
     display: block;
 }
-
 .fill {
     min-height: 100%;
     height: 100%;
 }
-
 h2 {
     font-family: Impact, Charcoal, sans-serif;
     font-size: 3vw;
     margin-left: -1%;
 }
-
 h1 {
     font-family: Impact, Charcoal, sans-serif;
     font-size: 1.7vw;
 }
-
 h3 {
     font-family: Impact, Charcoal, sans-serif;
     font-size: 0.8vw;
     margin-top: 7%;
+}
+
+.GrayDayDiv1 {
+    background-color: lightgray;
+    height: 6vw;
+    border: 1px solid #000000;
+}
+
+.GrayDayDiv2 {
+    background-color: lightgray;
+    height: 6vw;
+    border: 1px solid #000000;
 }

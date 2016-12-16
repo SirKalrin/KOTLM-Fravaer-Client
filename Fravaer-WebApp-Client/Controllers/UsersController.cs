@@ -37,13 +37,18 @@ namespace Fravaer_WebApp_Client.Controllers
 
         private string _deleteType = "Slet";
         // GET: User
-        public ActionResult Index()
+        public ActionResult Index(DateTime? monthTime)
         {
             decimal averageDays = Decimal.Divide(100, DateTime.Now.LastDayOfTheMonth().Day);
+            var month = DateTime.Now;
+            if (monthTime != null)
+            {
+                month = monthTime.Value;
+            }
             var ViewModel = new UserIndexViewModel()
             {
                 Departments = _departmentServiceGateway.ReadAll(),
-                MonthDateTime = DateTime.Now,
+                MonthDateTime = month,
                 AverageDaysInt = averageDays
             };
             return View(ViewModel);
@@ -228,7 +233,7 @@ namespace Fravaer_WebApp_Client.Controllers
         //Deletes the absence with the given deletableAbsenceId and redirects to the details view.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteAbsence(int? id, DateTime? monthDate, string absenceType, DateTime? absenceDate, int? deletableAbsenceId)
+        public ActionResult DeleteAbsence(int? id, DateTime? monthDate, string absenceType, int? deletableAbsenceId)
         {
             if (absenceType.Equals(_deleteType) && deletableAbsenceId != null)
             {
@@ -244,7 +249,7 @@ namespace Fravaer_WebApp_Client.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateAbsence(int? id, DateTime? monthDate, string absenceType, DateTime? absenceDate, int? deletableAbsenceId)
+        public ActionResult CreateAbsence(int? id, DateTime? monthDate, string absenceType, DateTime? absenceDate)
         {
 
             if (absenceDate != null && absenceType != null && absenceType != _deleteType)
