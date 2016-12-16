@@ -14,21 +14,22 @@
 <body>
 <div class="CheckboxRow col-md-2">
     <h3>Medarbejdere:</h3>
-    @foreach (var item in Model.Departments)
-    {
-        <div>
-            @if (item.Id == 1 && item.Users.Any())
-            {
-                <input class="Checkbox" type="checkbox" checked="checked"/>
-                @Html.DisplayFor(modelItem => item.Name)
-            }
-            @if (item.Id != 1)
-            {
-                <input class="Checkbox" type="checkbox" checked="checked"/>
-                @Html.DisplayFor(modelItem => item.Name)
-            }
-        </div>
-    }
+
+        @foreach (var item in Model.Departments)
+         {
+             <div>
+                 @if (item.Id == 1 && item.Users.Any())
+                 {
+                     <input class="Checkbox" type="checkbox" checked="checked"/>
+                     @Html.DisplayFor(modelItem => item.Name)
+                 }
+                 @if (item.Id != 1)
+                 {
+                     <input class="Checkbox" type="checkbox" checked="checked"/>
+                     @Html.DisplayFor(modelItem => item.Name)
+                 }
+             </div>
+         }
 </div>
     <div class="col-md-8">
         <div class="col-md-3">
@@ -118,12 +119,19 @@
         style = "text-decoration:none; color:white;"
     })
 </div>
+<div class="btn btn-success">
+    @Html.ActionLink("Ny Bruger", "Create", "Users", null, new
+    {
+        style = "text-decoration:none; color:white;"
+    })
+</div>
     <div class="btn btn-success">
-        @Html.ActionLink("Ny Bruger", "Create", "Users", null, new
+        @Html.ActionLink("Send email notifikation", "EmailNotification", "Users", null, new
 {
     style = "text-decoration:none; color:white;"
 })
     </div>
+
 </body>
 
 @functions

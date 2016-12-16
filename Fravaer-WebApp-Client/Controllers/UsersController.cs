@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Net.Mail;
 using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using System.Web;
@@ -99,7 +100,7 @@ namespace Fravaer_WebApp_Client.Controllers
             User user = _userServiceGateway.Read(id.Value);
 
             //Either adds or deleted an absence
-            if (absenceType.Equals("Slet") && deletableAbsenceId != null)
+            if (absenceType != null && absenceType.Equals("Slet") && deletableAbsenceId != null)
             {
                 _userManager.DeleteAbsenceFromUser(deletableAbsenceId.Value);
             }
@@ -221,6 +222,35 @@ namespace Fravaer_WebApp_Client.Controllers
             }
             return RedirectToAction("Details", new RouteValueDictionary(new { id = id.Value, monthDate = dateFrom}));
         }
-        
+        public async Task<ActionResult> EmailNotification()
+        {
+            var succesfullySent = new List<User>();
+            foreach (var user in _userServiceGateway.ReadAll())
+            {
+                if (user.EditFromDate <= DateTime.Now)
+                {
+                    var body = "<p>Hej {0} {1}</p><p></p><p>{2}</p>";
+                    var message = new MailMessage();
+                    //message.To.Add(new MailAddress("dr.iversen@hotmail.com"));
+                    message.To.Add(new MailAddress(user.Email));
+                    message.Subject = "Registrering af fravær";
+                    message.Body = string.Format(body, user.FirstName, user.LastName,
+                        "Du har glemt at godkende dit fravær for måneden. Godkend venligst dit fravær via ´Min Side´ på hjemmesiden.");
+                    message.IsBodyHtml = true;
+                    using (var smtp = new SmtpClient())
+                    {
+                        await smtp.SendMailAsync(message);
+                        succesfullySent.Add(user);
+                    }
+                }
+            }
+            var printString = "";
+            foreach (var user in succesfullySent)
+            {
+                printString = printString + user.FirstName + " " + user.LastName + "\n";
+            }           
+            System.Windows.Forms.MessageBox.Show( $"Email notifikationer blev sendt til:\n{printString}");
+            return RedirectToAction("Index");
+        }
     }
 }
