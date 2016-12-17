@@ -267,7 +267,7 @@ namespace Fravaer_WebApp_Client.Controllers
          */
         public async Task<ActionResult> EmailNotification()
         {
-            var succesfullySent = new List<User>();
+            var printString = "";
             foreach (var user in _userServiceGateway.ReadAll())
             {             
                     var body = "<p>Hej {0} {1}</p><p></p><p>{2}</p>";
@@ -280,14 +280,10 @@ namespace Fravaer_WebApp_Client.Controllers
                     using (var smtp = new SmtpClient())
                     {
                         await smtp.SendMailAsync(message);
-                        succesfullySent.Add(user);
-                    }                
+                        printString = printString + user.FirstName + " " + user.LastName + "\n";
+                }                
             }
-            var printString = "";
-            foreach (var user in succesfullySent)
-            {
-                printString = printString + user.FirstName + " " + user.LastName + "\n";
-            }
+
             System.Windows.Forms.MessageBox.Show($"Email notifikationer blev sendt til:\n{printString}");
             return RedirectToAction("Index");
         }

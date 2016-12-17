@@ -83,5 +83,49 @@ namespace Test
 
             Assert.AreEqual(result2, expectedResult2);
         }
+        [TestMethod]
+        public void GetStartIndexTest()
+        {
+
+            DateTime DateToTest = new DateTime(2016, 12, 1);
+
+            int WeekNumber = 1;
+            int WeekDaysCount = 7;
+
+            int initIndex = GetInitIndexTest(DateToTest);
+            int result = (WeekNumber * WeekDaysCount) - initIndex;
+
+            if (result < 0)
+            {
+                Assert.AreEqual(((WeekNumber * WeekDaysCount) + 1), 8);
+            }
+            else
+            {
+                Assert.AreEqual(((WeekNumber * WeekDaysCount) + 1 - initIndex), 5);
+            }
+        }
+
+        [TestMethod]
+        public int GetInitIndexTest(DateTime MonthToTest)
+        {
+            ArrayList _daysList = new ArrayList() { "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday" };
+
+            DateTime December = new DateTime(2016, 12, 1);
+            DateTime January = new DateTime(2017, 1, 1);
+
+            int TestDecember = _daysList.IndexOf(December.FirstDayOfTheMonth().DayOfWeek.ToString());
+            int DecemberIndex = 3;
+
+            int TestJanuary = _daysList.IndexOf(January.FirstDayOfTheMonth().DayOfWeek.ToString());
+            int JanuaryIndex = 6;
+
+            Assert.IsNotNull(TestDecember);
+            Assert.AreEqual(TestDecember, DecemberIndex);
+
+            Assert.IsNotNull(TestJanuary);
+            Assert.AreEqual(TestJanuary, JanuaryIndex);
+
+            return _daysList.IndexOf(MonthToTest.FirstDayOfTheMonth().DayOfWeek.ToString());
+        }
     }
 }
