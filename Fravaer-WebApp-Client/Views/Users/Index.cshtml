@@ -13,7 +13,7 @@
 
 
 <body>
-
+    @{ User currentUser = (User)HttpContext.Current.Session["currentUser"];}
     <div class="Container col-xs-12">
 
         @*<div class="CheckboxRow col-md-2">
@@ -176,25 +176,27 @@
                         <hr />
                     </div>
                 </div>
-
+            @if (currentUser.Role == Role.Administrator)
+            {
                 <div class="btn btn-success">
                     @Html.ActionLink("Afdelinger", "Index", "Departments", null, new
-               {
-                   style = "text-decoration:none; color:white;"
-               })
+                    {
+                        style = "text-decoration:none; color:white;"
+                    })
+                </div>
+                <div class="btn btn-success">
+                    @Html.ActionLink("Ny Bruger", "Create", "Users", null, new
+                    {
+                        style = "text-decoration:none; color:white;"
+                    })
                 </div>
             <div class="btn btn-success">
-                @Html.ActionLink("Ny Bruger", "Create", "Users", null, new
+                @Html.ActionLink("Email Notifikation", "EmailNotification", "Users", null, new
                 {
-                    style = "text-decoration:none; color:white;"
+                style = "text-decoration:none; color:white;"
                 })
             </div>
-            <div class="btn btn-success">
-                @Html.ActionLink("Email Notifikation", "EmailNotification", "Users", null, new
-               {
-                   style = "text-decoration:none; color:white;"
-               })
-            </div>
+            }
             </div>
         </div>
     </body>
