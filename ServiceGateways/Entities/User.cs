@@ -36,8 +36,7 @@ namespace ServiceGateways.Entities
         public Department Department { get; set; }
         [Required]
         public Role Role { get; set; }
-
-        public DateTime EditFromDate { get; set; }
+        
 
         public User()
         {

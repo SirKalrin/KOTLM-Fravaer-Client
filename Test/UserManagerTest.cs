@@ -83,17 +83,5 @@ namespace Test
 
             Assert.AreEqual(result2, expectedResult2);
         }
-
-        //[TestMethod]
-        //public void GetMessage_Input2_ReturnHelloWorldMessage()
-        //{
-        //    var consoleService = new Mock<IConsoleService>();
-        //    consoleService.Setup(c => c.ReadLine()).Returns("2");
-
-        //    var bankManager = new BankManager(consoleService.Object);
-        //    bankManager.RunBankApplication();
-
-        //    consoleService.Verify(c => c.WriteLine("Hello World!"), Times.Once());
-        //}
     }
 }

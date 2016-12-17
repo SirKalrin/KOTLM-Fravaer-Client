@@ -261,27 +261,27 @@ namespace Fravaer_WebApp_Client.Controllers
             return RedirectToAction("Details", "Users", new RouteValueDictionary(new { id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType }));
 
         }
+
+        /*
+         * Sends a hardcoded notification-email message to all users in the database.
+         */
         public async Task<ActionResult> EmailNotification()
         {
             var succesfullySent = new List<User>();
             foreach (var user in _userServiceGateway.ReadAll())
-            {
-                if (user.EditFromDate <= DateTime.Now)
-                {
+            {             
                     var body = "<p>Hej {0} {1}</p><p></p><p>{2}</p>";
                     var message = new MailMessage();
-                    //message.To.Add(new MailAddress("dr.iversen@hotmail.com"));
                     message.To.Add(new MailAddress(user.Email));
                     message.Subject = "Registrering af fravær";
                     message.Body = string.Format(body, user.FirstName, user.LastName,
-                        "Du har glemt at godkende dit fravær for måneden. Godkend venligst dit fravær via ´Min Side´ på hjemmesiden.");
+                        "Fristen for godkendelse af fravær nærmer sig. Godkend venligst dit fravær hurtigst muligt via ´Min Side´ på hjemmesiden, hvis du endnu ikke har gjort det.");
                     message.IsBodyHtml = true;
                     using (var smtp = new SmtpClient())
                     {
                         await smtp.SendMailAsync(message);
                         succesfullySent.Add(user);
-                    }
-                }
+                    }                
             }
             var printString = "";
             foreach (var user in succesfullySent)
