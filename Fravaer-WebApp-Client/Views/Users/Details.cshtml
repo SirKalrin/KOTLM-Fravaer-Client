@@ -119,13 +119,13 @@
         <div class="WeekEndDay col-xs-1">
             <p>Søn</p>
         </div>
-        @for (int i = 0; i < GetWeekCountFromMonth(); i++)
+        @for (int i = 1; i < GetWeekCountFromMonth(); i++)
         {
-            if (i == 0)
+            if (i == 1)
             {
                 for (int j = 0; j < @Model.InitIndex; j++)
                 {
-                    if (j == (7 * (i + 1)) - 1 || j == 7 * (i + 1) - 2)
+                    if (j == (7 * i) - 1 || j == 7 * i - 2)
                     {
                         <div class="GrayDayDiv1 col-xs-1"></div>
                     }
@@ -135,9 +135,9 @@
                     }
                 }
             }
-            for (int s = GetStartIndex(i); s <= (i + 1) * 7 - Model.InitIndex; s++)
+            for (int s = GetStartIndex(i); s <= i * 7 - Model.InitIndex; s++)
             {
-                if (s + Model.InitIndex == (7 * (i + 1)) - 1 || s + Model.InitIndex == 7 * (i + 1))
+                if (s + Model.InitIndex == (7 * i) - 1 || s + Model.InitIndex == 7 * i)
                 {
                     <div class="GrayDayDiv1 col-xs-1">
                         <p>@s</p>
@@ -194,9 +194,9 @@
                 }
                 if (s == Model.DateTime.LastDayOfTheMonth().Day)
                 {
-                    for (int m = s + Model.InitIndex; m < (i + 1) * 7; m++)
+                    for (int m = s + Model.InitIndex; m < i * 7; m++)
                     {
-                        if (m == (7 * (i + 1)) - 1 || m == 7 * (i + 1) - 2)
+                        if (m == (7 * i) - 1 || m == 7 * i - 2)
                         {
                             <div class="GrayDayDiv1 col-xs-1"></div>
                         }
@@ -288,7 +288,7 @@
     }
     public int GetStartIndex(int i)
     {
-        return new UserManager().GetStartIndex(i, Model.InitIndex);
+        return new UserManager().GetWeeklyStartDate(i, Model.InitIndex);
     }
     public int GetWeekCountFromMonth()
     {

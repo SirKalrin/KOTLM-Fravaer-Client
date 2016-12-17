@@ -111,20 +111,18 @@ namespace BusinessLogic.Managers
         }
 
         /* UserDetails html helper method*/
-        /* Returns the starting index for placing the first day of the month*/
-        public int GetStartIndex(int i, int initIndex)
+        /* Returns the first date in the given week*/
+        public int GetWeeklyStartDate(int weekNumber, int initIndex)
         {
-            int result = (i * 7) - initIndex;
+            int currentWeek = 1;
 
-            if (result < 0)
-            {
-                return (i * 7) + 1;
-            }
-            else
-            {
-                return (i * 7) + 1 - initIndex;
-            }
+            weekNumber = weekNumber - currentWeek;
 
+            if (weekNumber == 0)
+            {
+                return 1;
+            }
+            return (weekNumber * 7) + 1 - initIndex;
         }
 
         /* UserDetails html helper method*/
