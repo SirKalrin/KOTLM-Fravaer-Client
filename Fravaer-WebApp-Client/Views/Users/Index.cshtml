@@ -183,12 +183,18 @@
                    style = "text-decoration:none; color:white;"
                })
                 </div>
-                <div class="btn btn-success">
-                    @Html.ActionLink("Ny Bruger", "Create", "Users", null, new
+            <div class="btn btn-success">
+                @Html.ActionLink("Ny Bruger", "Create", "Users", null, new
+                {
+                    style = "text-decoration:none; color:white;"
+                })
+            </div>
+            <div class="btn btn-success">
+                @Html.ActionLink("Email Notifikation", "EmailNotification", "Users", null, new
                {
                    style = "text-decoration:none; color:white;"
                })
-                </div>
+            </div>
             </div>
         </div>
     </body>
