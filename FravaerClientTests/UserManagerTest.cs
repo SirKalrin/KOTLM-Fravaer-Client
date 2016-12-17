@@ -9,7 +9,7 @@ using Moq;
 using ServiceGateways.Entities;
 using ServiceGateways.Interfaces;
 
-namespace Test
+namespace FravaerClientTests
 {
     [TestClass]
     public class UserManagerTest
