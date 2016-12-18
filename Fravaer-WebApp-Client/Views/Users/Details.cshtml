@@ -242,40 +242,46 @@
             <h1>Arbejdsfridage:</h1>
             <form method="post" action="@Url.Action("AddGrayDaysToUser", "Users")">
 
-                <input type="hidden" name="id" value="@Model.User.Id" />
+                <input type="hidden" name="id" value="@Model.User.Id"/>
 
                 <div class="workFreeDaysDiv col-xs-1">
-                    <input type="checkbox" name="chosenDays" value="Monday" />M
+                    <input type="checkbox" name="chosenDays" value="Monday"/>M
                 </div>
                 <div class="workFreeDaysDiv col-xs-1">
-                    <input type="checkbox" name="chosenDays" value="Tuesday" />T
+                    <input type="checkbox" name="chosenDays" value="Tuesday"/>T
                 </div>
                 <div class="workFreeDaysDiv col-xs-1">
-                    <input type="checkbox" name="chosenDays" value="Wednesday" />O
+                    <input type="checkbox" name="chosenDays" value="Wednesday"/>O
                 </div>
                 <div class="workFreeDaysDiv col-xs-1">
-                    <input type="checkbox" name="chosenDays" value="Thursday" />T
+                    <input type="checkbox" name="chosenDays" value="Thursday"/>T
                 </div>
                 <div class="workFreeDaysDiv col-xs-1">
-                    <input type="checkbox" name="chosenDays" value="Friday" />F
+                    <input type="checkbox" name="chosenDays" value="Friday"/>F
                 </div>
                 <div class="workFreeDaysDiv col-xs-1">
-                    <input type="checkbox" name="chosenDays" value="Saturday" />L
+                    <input type="checkbox" name="chosenDays" value="Saturday"/>L
                 </div>
                 <div class="workFreeDaysDiv col-xs-1">
-                    <input type="checkbox" name="chosenDays" value="Sunday" />S
+                    <input type="checkbox" name="chosenDays" value="Sunday"/>S
                 </div>
                 <p style="font-weight: bold"> Start dato:</p>
                 <div class="intervalStart col-xs-12">
-                    <input type="date" name="dateFrom" />
+                    <input type="date" name="dateFrom"/>
                 </div>
                 <p style="font-weight: bold"> Slut dato:</p>
                 <div class="intervalStart col-xs-12">
-                    <input type="date" name="dateEnd" />
+                    <input type="date" name="dateEnd"/>
                 </div>
                 <div class="saveButton col-xs-6">
-                    <input class="btn btn-default" type="submit" value="Gem">
+                    <input class="btn btn-success" type="submit" value="Gem">
                 </div>
+            </form>
+
+            <form method="post" action="@Url.Action("DeleteGrayDaysFromUser", "Users")">
+                <input type="hidden" value="@Model.User.Id" name="userId"/>
+                <input type="hidden" value="@Model.DateTime" name="currentMonth"/>
+                <input class="btn btn-danger" type="submit" value="Slet"/>
             </form>
         }
     </div>

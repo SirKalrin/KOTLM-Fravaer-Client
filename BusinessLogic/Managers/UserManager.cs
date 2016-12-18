@@ -146,5 +146,10 @@ namespace BusinessLogic.Managers
                 return 5;
             }
         }
+
+        public void DeleteAbsenceFromUser(User user, Absence absence)
+        {
+            _absenceServiceGateway.Delete(absence.Id);
+        }
     }
 }

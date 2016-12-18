@@ -230,6 +230,20 @@ namespace Fravaer_WebApp_Client.Controllers
             return RedirectToAction("Details", new RouteValueDictionary(new { id = id.Value, monthDate = dateFrom }));
         }
 
+        [HttpPost]
+        public ActionResult DeleteGrayDaysFromUser(int? userId,  DateTime currentMonth)
+        {
+            var user = _userServiceGateway.Read(userId.Value);
+            foreach (var absence in user.Absences)
+            {
+                if (absence.Status.Equals(Statuses.GRAY))
+                {
+                    _userManager.DeleteAbsenceFromUser(user, absence);
+                }
+            }
+            return RedirectToAction("Details", new RouteValueDictionary(new { id = userId.Value, monthDate = currentMonth }));
+        }
+
         // POST: Absences/Delete/5
         //Deletes the absence with the given deletableAbsenceId and redirects to the details view.
         [HttpPost]
