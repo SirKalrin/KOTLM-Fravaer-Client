@@ -119,7 +119,6 @@ namespace Fravaer_WebApp_Client.Controllers
             {
                 _absenceServiceGateway.Delete(deletableAbsenceId.Value);
             }
-
             return RedirectToAction("Details", "Users", new RouteValueDictionary(new { id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType }));
         }
     }

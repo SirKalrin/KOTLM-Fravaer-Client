@@ -105,22 +105,6 @@ namespace Fravaer_WebApp_Client.Controllers
         [HttpPost]
         public ActionResult Details(int? id, DateTime? monthDate, string absenceType, DateTime? absenceDate, int? deletableAbsenceId)
         {
-            //User user = _userServiceGateway.Read(id.Value);
-
-            ////Either adds or deleted an absence
-            //if (absenceType.Equals("Slet") && deletableAbsenceId != null)
-            //{
-            //    _userManager.DeleteAbsenceFromUser(deletableAbsenceId.Value);
-            //}
-            //else if(absenceType.Equals("Slet"))
-            //{
-            //    //Do nothing
-            //}
-            //else if(absenceDate != null && absenceType != null)
-            //{
-            //    _userManager.AddAbsenceToUser(user, absenceDate, absenceType);
-            //}
-
             return RedirectToAction("Details", "Users", new RouteValueDictionary(new {id = id.Value, monthDate = monthDate.Value, chosenAbsence = absenceType}));
         }
 
@@ -146,7 +130,7 @@ namespace Fravaer_WebApp_Client.Controllers
             {
                 user = _userServiceGateway.Create(user);
                 _authorizationServiceGateway.Register(user);
-                return RedirectToAction("Index", "Users");
+                return RedirectToAction("Index");
             }
 
             return View(new CreateUserViewModel()
@@ -228,6 +212,20 @@ namespace Fravaer_WebApp_Client.Controllers
                 i = i.AddDays(1);
             }
             return RedirectToAction("Details", new RouteValueDictionary(new { id = id.Value, monthDate = dateFrom }));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteGrayDaysFromUser(int? userId,  DateTime currentMonth)
+        {
+            var user = _userServiceGateway.Read(userId.Value);
+            foreach (var absence in user.Absences)
+            {
+                if (absence.Status.Equals(Statuses.GRAY))
+                {
+                    _userManager.DeleteAbsenceFromUser(user, absence);
+                }
+            }
+            return RedirectToAction("Details", new RouteValueDictionary(new { id = userId.Value, monthDate = currentMonth }));
         }
 
         // POST: Absences/Delete/5
