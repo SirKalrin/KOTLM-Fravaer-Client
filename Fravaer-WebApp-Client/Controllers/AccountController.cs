@@ -28,31 +28,6 @@ namespace Fravaer_WebApp_Client.Controllers
         private IAuthorizationServiceGateway _authorizationServiceGateway = new ServiceGatewayFacade().GetAuthorisationServiceGateway();
         private IServiceGateway<User, int> _userServiceGateway = new ServiceGatewayFacade().GetUserServiceGateway();
 
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
-
-        public AccountController()
-        {
-        }
-
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }
-
-        public ApplicationSignInManager SignInManager
-        {
-            get { return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>(); }
-            private set { _signInManager = value; }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get { return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(); }
-            private set { _userManager = value; }
-        }
-
         //
         // GET: /Account/Login
         [AllowAnonymous]
@@ -79,7 +54,6 @@ namespace Fravaer_WebApp_Client.Controllers
                         return Redirect(returnUrl);
                     }
                     return RedirectToAction("Details", "Users", new {id = _userServiceGateway.ReadAll().FirstOrDefault(x => x.UserName == model.UserName)?.Id});
-
                 }
                 ModelState.AddModelError("", "Invalid login attempt!");
 
