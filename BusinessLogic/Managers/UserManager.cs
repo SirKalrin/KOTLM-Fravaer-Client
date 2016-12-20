@@ -147,33 +147,4 @@ namespace BusinessLogic.Managers
             }
         }
     }
-        }
-
-        /* UserDetails html helper method*/
-        /* Returns an absence if on is present with the given dateTime*/
-        public Absence GetAbsenceForDate(int day, DateTime dateTime, List<Absence> absences )
-        {
-            DateTime eventDate = new DateTime(dateTime.Year, dateTime.Month, day);
-            return absences.FirstOrDefault(x => x.Date == eventDate);
-        }
-
-        /* UserDetails html helper method*/
-        /* Get the number of weeks on the given month*/
-        public int GetWeekCountFromMonth(DateTime dateTime, int initIndex)
-        {
-            if (dateTime.LastDayOfTheMonth().Day > 30 && initIndex > 4 || dateTime.LastDayOfTheMonth().Day > 29 && initIndex > 5)
-            {
-                return 6;
-            }
-            else
-            {
-                return 5;
-            }
-        }
-
-        public void DeleteAbsenceFromUser(User user, Absence absence)
-        {
-            _absenceServiceGateway.Delete(absence.Id);
-        }
-    }
 }
