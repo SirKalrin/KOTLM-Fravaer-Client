@@ -37,6 +37,13 @@ namespace Fravaer_WebApp_Client.Controllers
             return View();
         }
 
+        public ActionResult LogOut()
+        {
+            System.Web.HttpContext.Current.Session["token"] = null;
+            System.Web.HttpContext.Current.Session["currentUser"] = null;
+            return RedirectToAction("Login", "Account");
+        }
+
         //
         // POST: /Account/Login
         [HttpPost]

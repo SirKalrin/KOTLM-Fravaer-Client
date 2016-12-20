@@ -159,17 +159,24 @@
                             {
                                 if (GetAbsenceForDate(s) != null)
                                 {
-                                    <form method="post" action="@Url.Action("DeleteAbsence", "Users", new RouteValueDictionary(
-                                                                    new
-                                                                    {
-                                                                        id = @Model.User.Id,
-                                                                        monthDate = @Model.DateTime.FirstDayOfTheMonth(),
-                                                                        absenceType = @Model.ChosenAbsence,
-                                                                        deletableAbsenceId = GetAbsenceForDate(s).Id
-                                                                    }))">
-                                        @Html.AntiForgeryToken()
-                                        <input class="AbsenceLbl" type="submit" value="@GetAbsenceForDate(s).Status.ToString()">
-                                    </form>
+                                    //if (currentUser.Id == Model.User.Id || currentUser.Role == Role.Administrator)
+                                    //{
+                                        <form method="post" action="@Url.Action("DeleteAbsence", "Users", new RouteValueDictionary(
+                                                                        new
+                                                                        {
+                                                                            id = @Model.User.Id,
+                                                                            monthDate = @Model.DateTime.FirstDayOfTheMonth(),
+                                                                            absenceType = @Model.ChosenAbsence,
+                                                                            deletableAbsenceId = GetAbsenceForDate(s).Id
+                                                                        }))">
+                                            @Html.AntiForgeryToken()
+                                            <input class="AbsenceLbl" type="submit" value="@GetAbsenceForDate(s).Status.ToString()">
+                                        </form>
+                                    //}
+                                    @*else
+                                    {
+                                        <div class="AbsenceLbl">@GetAbsenceForDate(s).Status.ToString()</div>
+                                    }*@
                                 }
                                 else
                                 {

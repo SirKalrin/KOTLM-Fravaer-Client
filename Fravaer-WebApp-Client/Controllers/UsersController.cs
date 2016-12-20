@@ -222,7 +222,7 @@ namespace Fravaer_WebApp_Client.Controllers
             {
                 if (absence.Status.Equals(Statuses.GRAY))
                 {
-                    _userManager.DeleteAbsenceFromUser(user, absence);
+                    _userManager.DeleteAbsenceFromUser( absence.Id);
                 }
             }
             return RedirectToAction("Details", new RouteValueDictionary(new { id = userId.Value, monthDate = currentMonth }));
@@ -234,7 +234,7 @@ namespace Fravaer_WebApp_Client.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteAbsence(int? id, DateTime? monthDate, string absenceType, int? deletableAbsenceId)
         {
-            if (absenceType.Equals(_deleteType) && deletableAbsenceId != null)
+            if (absenceType != null && absenceType.Equals(_deleteType) && deletableAbsenceId != null)
             {
                 _absenceServiceGateway.Delete(deletableAbsenceId.Value);
             }
